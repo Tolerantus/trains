@@ -6,8 +6,8 @@ pageEncoding="UTF-8"%>
 <html>
 
 <head>
-	<link rel="stylesheet" href="auth.css">
-	<link rel="stylesheet" href="Validation Error.css">
+	<link rel="stylesheet" href="resources/auth.css">
+	<link rel="stylesheet" href="resources/Validation Error.css">
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -97,7 +97,7 @@ pageEncoding="UTF-8"%>
 		
 	</form>
 </div>
-<form action="test" method="get" name="test"></form>
-<form action="NewUser.jsp" method="post" id="register" name='reg'></form>
+<c:url var="regURL" value="/login"/>
+<form action="${regURL }" method="post" id="register" name='reg'></form>
 </body>
 </html>

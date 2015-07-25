@@ -7,7 +7,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" href="NewTicket.css" type='text/css'>
+<link rel="stylesheet" href="resources/NewTicket.css" type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <title>You have bought the ticket!</title>
 </head>
@@ -15,10 +15,10 @@
 
 <body>
 <c:if test="${user!=null}">
-<div class="user"><img alt="" src="images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
 <div >
 	<div id="menu">
-		<a href="Menu.jsp"><img alt="" src="images/home.png"></a>
+		<a href="Menu.jsp"><img alt="" src="resources/images/home.png"></a>
 	</div>
 </div>
 <h1 align="center">You have bought the ticket!</h1>
@@ -49,7 +49,8 @@ String[] ticketInfo_tokens = ticketInfo.split(";");%>
 <c:if test="${user==null}">
 	<h1 align="center" style="color:red">Unregistered user cannot look through this page!</h1>
 	<div align="center">
-		<form action="Auth.jsp">
+		<c:url var="loginURL" value="/login"/>
+		<form action="${loginURL }">
 			<input type="submit" class="submit" value="Login">
 		</form>
 	</div>

@@ -13,20 +13,9 @@ public class TrainCreator {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(TrainCreator.class);
 
-//	public TrainCreator(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
 	@Transactional
 	public   void create(NewTrainInfo dto){
-//		try {
-//			dao.begin();
 			LOG.debug(dto);
 			dao.createTrain(Integer.parseInt(dto.getTrainCapacity()));
-//			dao.commit();
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

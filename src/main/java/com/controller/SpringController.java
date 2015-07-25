@@ -4,7 +4,6 @@ package com.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.dto.AllJourneysInfo;
 import com.dto.AllRoutesInfo;
@@ -51,10 +49,14 @@ public class SpringController {
 	@Autowired
 	private Dispatcher dispatcher;
 	
-	@RequestMapping("/login")
+	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String hello(HttpServletRequest request) {
 	    System.out.println(request.getServletPath());
 	    return "Auth";
+	}
+	@RequestMapping(value="/login", method = RequestMethod.POST)
+	public String showNewUserRegisterForm(HttpServletRequest request, Model model) {
+		return "NewUser";
 	}
 	@RequestMapping(value = "/menu", method = RequestMethod.POST)
     public String validateUser(HttpServletRequest request, Model model) {
@@ -78,6 +80,10 @@ public class SpringController {
 			model.addAttribute("error", "invalid combination login/password");
 			return "Auth";
 		}
+	}
+	@RequestMapping(value = "/menu", method = RequestMethod.GET)
+    public String returnToMenu(HttpServletRequest request, Model model) {
+		return "Menu";
 	}
 	@RequestMapping(value = "/newUser", method = RequestMethod.POST)
     public String newUser(HttpServletRequest request, Model model) {
@@ -249,7 +255,7 @@ public class SpringController {
 		}
 		if (!container.getStations().isEmpty())
 		session.setAttribute("allStations", container.getStations());
-		return "routeCreator";
+		return "RouteCreator";
 	}
 	@RequestMapping(value="/newRoute/newStartAndFinish", method = RequestMethod.POST)
 	public String createStartFinish(HttpServletRequest request,	Model model) {
@@ -337,6 +343,11 @@ public class SpringController {
 			return "newRouteInfo";
 		}
 	}
+	@RequestMapping(value="/creatingTrain", method = RequestMethod.POST)
+	public String showNewTrainForm(HttpServletRequest request, Model model) {
+		return "TrainCreator";
+	}
+	
 	@RequestMapping(value="/newTrain", method = RequestMethod.POST)
 	public String createTrain(HttpServletRequest request, Model model) {
 		String trainCapacity = request.getParameter("seats");
@@ -393,6 +404,10 @@ public class SpringController {
 			model.addAttribute("train", journey.getTrain());
 			return "CreatingJourneySuccess";
 		}
+	}
+	@RequestMapping(value="/newStationForm", method = RequestMethod.POST)
+	public String showNewStationForm(HttpServletRequest request, Model model) {
+		return "StationCreator";
 	}
 	@RequestMapping(value="/newStation", method = RequestMethod.POST)
 	public String createStation(HttpServletRequest request, Model model) {

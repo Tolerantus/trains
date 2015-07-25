@@ -5,8 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="passengerRegistration.css">
-<link rel="stylesheet" href="Validation Error.css">
+<link rel="stylesheet" href="resources/passengerRegistration.css">
+<link rel="stylesheet" href="resources/Validation Error.css">
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -17,10 +17,11 @@
 <body>
 <c:if test="${user!=null}">
 
-<div class="user"><img alt="" src="images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
 <div >
 	<div id="menu">
-		<a href="Menu.jsp"><img alt="" src="images/home.png"></a>
+		<c:url var="menuUrl" value="/menu"/>
+		<a href="${menuURL }"><img alt="" src="resources/images/home.png"></a>
 	</div>
 </div>
 <c:if test="${emptySeats !=null}">
@@ -70,8 +71,8 @@
 			</form>
 		</div>		
 		
-<script type="text/javascript" src="passengerRegistrationDate.js"></script>
-<script type="text/javascript" src="passengerRegistrationValid.js"></script>
+<script type="text/javascript" src="resources/passengerRegistrationDate.js"></script>
+<script type="text/javascript" src="resources/passengerRegistrationValid.js"></script>
 		
 		
 	</c:if>
@@ -92,7 +93,8 @@
 <c:if test="${user==null}">
 	<h1 align="center" style="color:red">Unregistered user cannot look through this page!</h1>
 	<div align="center">
-		<form action="Auth.jsp">
+		<c:url var="loginURL" value="/login"/>
+		<form action="${loginURL }">
 			<input type="submit" class="submit" value="Login">
 		</form>
 	</div>

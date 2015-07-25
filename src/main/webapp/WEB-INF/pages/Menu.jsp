@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="Menu.css">
+<link rel="stylesheet" href="resources/Menu.css">
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
 <c:url var="findJourneyURL" value="/stationsChoosing"/>
 <c:url var="checkTicketsURL" value="/myTickets"/>
 <c:if test="${user!=null}">
-<div class="user"><img alt="" src="images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
 <div class="wrapper">
 	<div class="menu-item">
 		<form action="${getShedule }" method="post">
@@ -44,9 +44,9 @@
 			<input type="submit" value="Create route" >
 		</form>
 	</div>
-	<c:url var="createTrainURL" value="/newTrain"/>
+	<c:url var="createTrainURL" value="/creatingTrain"/>
 	<div class="menu-item2">
-		<form action="${createTrainURL }">
+		<form action="${createTrainURL }" method="post">
 			<input type ="submit" value="Create train"> 
 		</form>
 	</div>
@@ -57,9 +57,9 @@
 			<input type="submit" value="Create journey">
 		</form>
 	</div>
-	<c:url var="stationCreatorURL" value="/newStation"/>
+	<c:url var="stationCreatorURL" value="/newStationForm"/>
 	<div class="menu-item2">
-		<form action="${stationCreatorURL }">
+		<form action="${stationCreatorURL }" method="post">
 			<input type="submit" value="Create station">
 		</form>
 	</div>
@@ -99,7 +99,8 @@
 <c:if test="${user==null}">
 	<h1 align="center" style="color:red">Unregistered user cannot look through this page!</h1>
 	<div align="center">
-		<form action="Auth.jsp">
+		<c:url var="loginURL" value="/login"/>
+		<form action="${loginURL }">
 			<input type="submit" class="submit" value="Login">
 		</form>
 	</div>

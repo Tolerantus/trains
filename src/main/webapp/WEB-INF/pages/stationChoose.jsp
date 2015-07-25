@@ -8,16 +8,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<link rel="stylesheet" href="stationChoose.css">
+<link rel="stylesheet" href="resources/stationChoose.css">
 <title>Station choosing</title>
 </head>
 <body>
 <c:if test="${user!=null}">
 <div id="top-menu">
-	<div class="user"><img alt="" src="images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+	<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
 	<div >
 		<div id="menu">
-			<a href="Menu.jsp"><img alt="" src="images/home.png"></a>
+			<c:url var="menuURL" value="/menu"/>
+			<a href="${menuURL }"><img alt="" src="resources/images/home.png"></a>
 		</div>
 	</div>
 </div>
@@ -29,7 +30,7 @@
 		
 		<c:if test="${simpleShedule == null}">
 		<div class="selector" align="center">
-			<span><img class="flag" alt="" src="images/start.png"></span>
+			<span><img class="flag" alt="" src="resources/images/start.png"></span>
 			<select name="st_dep" id="st_dep">
 				<option disabled>department</option>
 				<c:forEach var="station" items="${allStations}">
@@ -44,7 +45,7 @@
 					<option selected>${station}</option>
 					</c:forEach>
 				</select>
-				<span><img class="flag"  alt="" src="images/stop.png"></span>
+				<span><img class="flag"  alt="" src="resources/images/stop.png"></span>
 		</div>
 		<div class="date">
 			
@@ -54,7 +55,7 @@
 	<c:if test="${simpleShedule != null}">
 		
 		<div class="selector" align="center">
-				<span id="flag"><img class="flag" alt="" src="images/start.png"></span>
+				<span id="flag"><img class="flag" alt="" src="resources/images/start.png"></span>
 				<select name="station" id="station">
 					<option disabled>your station</option>
 					<c:forEach var="station" items="${allStations}"> 
@@ -102,7 +103,8 @@
 <c:if test="${user==null}">
 	<h1 align="center" style="color:red">Unregistered user cannot look through this page!</h1>
 	<div align="center">
-		<form action="Auth.jsp">
+		<c:url var="loginURL" value="/login"/>
+		<form action="${loginURL }">
 			<input type="submit" class="submit" value="Login">
 		</form>
 	</div>

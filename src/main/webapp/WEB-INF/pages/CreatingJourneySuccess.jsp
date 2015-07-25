@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="CreatingJourneySuccess.css">
+<link rel="stylesheet" href="resources/CreatingJourneySuccess.css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <title>Journey created</title>
@@ -17,7 +17,8 @@
 	<div class="user"><img alt="" src="images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
 	<div >
 		<div id="menu">
-			<a href="Menu.jsp"><img alt="" src="images/home.png"></a>
+		<c:url var="menuURL" value="/menu"/>
+			<a href="${menuURL }"><img alt="" src="images/home.png"></a>
 		</div>
 	</div>
 </div>
@@ -56,15 +57,16 @@
 	</c:if>
 <c:if test="${admin==false }">
 <h3 align="center" style="color:red">You do not have permission to view this page!</h3>
-	<form action="Menu.jsp">
-	<input type="submit" value="Login">
+	<form action="${menuURL }" >
+	<input type="submit" class="submit" value="Login">
 	</form>
 </c:if>
 	</c:if>
 <c:if test="${user==null}">
 	<h1 align="center" style="color:red">Unregistered user cannot look through this page!</h1>
 	<div align="center">
-		<form action="Auth.jsp">
+		<c:url var="loginURL" value="/login"/>
+		<form action="${loginURL }">
 			<input type="submit" class="submit" value="Login">
 		</form>
 	</div>
