@@ -10,7 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Journeys</title>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<link rel="stylesheet" href="resources/apprJours.css">
+<link rel="stylesheet" href=<c:url value='/resources/apprJours.css'/>>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 </head>
 
@@ -21,11 +21,11 @@
 <c:url var="buyTicketURL" value="/appropriateJourneys/buyTicket"/>
 <c:if test="${user != null}">
 <div id="top-menu">
-	<div class="user"><img alt="" src="images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+	<div class="user"><img alt="" src=<c:url value='/resources/images/1.png'/>><span class="user"><%=session.getAttribute("user")%></span></div>
 	<div class="menu">
 		<div id="menu">
 			<c:url var="menuURL" value="/menu"/>
-			<a href="${menuURL }"><img alt="" src="images/home.png"></a>
+			<a href="${menuURL }"><img alt="" src=<c:url value='/resources/images/home.png'/>></a>
 		</div>
 	</div>
 </div>

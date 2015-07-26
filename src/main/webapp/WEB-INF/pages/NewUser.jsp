@@ -5,8 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="resources/auth.css">
-<link rel="stylesheet" href="resources/Validation Error.css">
+<link rel="stylesheet" href=<c:url value='/resources/auth.css'/>>
+<link rel="stylesheet" href=<c:url value='/resources/Validation Error.css'/>>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -39,7 +39,7 @@
 </div>
 
 
-<script type="text/javascript" src="resources/NewUser.js"></script>
+<script type="text/javascript" src=<c:url value='/resources/NewUser.js'/>></script>
 <form action="${authURL}" method="get" name="back"></form>
 </body>
 </html>

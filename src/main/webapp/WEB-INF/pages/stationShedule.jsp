@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="resources/stationShedule.css">
+<link rel="stylesheet" href=<c:url value='/resources/stationShedule.css'/>>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Station schedule</title>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
@@ -15,14 +15,14 @@
 
 <c:if test="${user!=null}">
 
-<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+<div class="user"><img alt="" src=<c:url value='/resources/images/1.png'/>><span class="user"><%=session.getAttribute("user")%></span></div>
 <div >
 	<div id="menu">
 		<c:url var="menuURL" value="/menu"/>
-		<a href="${menuURL }"><img alt="" src="resources/images/home.png"></a>
+		<a href="${menuURL }"><img alt="" src=<c:url value='/resources/images/home.png'/>></a>
 	</div>
 </div>
-<script type="text/javascript" src="resources/returnToAuth.js"></script>
+<script type="text/javascript" src=<c:url value='/resources/returnToAuth.js'/>></script>
 <h1 align="center">Schedule for station "${station}"</h1>
 <c:if test="${journeysData !=null }">
 	<table id="t" >
@@ -69,7 +69,8 @@
 <div class="wrapper">
 	
 	<div class="button-container">
-				<form action="Controller" method="post" name="back" >
+				<c:url var="scheduleURL" value="/schedule"/>
+				<form action="${scheduleURL }" method="post" name="back" >
 				<input type="hidden" name="action" value="GET_SHEDULE">
 				<input type="button" class="submit" value="Back" onclick="document.forms['back'].submit()">
 				</form>

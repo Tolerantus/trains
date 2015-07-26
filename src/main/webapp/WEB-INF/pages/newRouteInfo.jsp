@@ -6,8 +6,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="resources/NewRouteInfo.css">
-<link rel="stylesheet" href="resources/Validation Error.css">
+<link rel="stylesheet" href=<c:url value='/resources/NewRouteInfo.css'/>>
+<link rel="stylesheet" href=<c:url value='/resources/ValidationError.css'/>>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>New route</title>
@@ -15,11 +15,11 @@
 <body>
 <c:if test="${user!=null}">
 <c:if test="${admin==true }">
-<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+<div class="user"><img alt="" src=<c:url value='/resources/images/1.png'/>><span class="user"><%=session.getAttribute("user")%></span></div>
 <div >
 	<div id="menu">
 		<c:url var="menuURL" value="/menu"/>
-		<a href="${menuURL }"><img alt="" src="resources/images/home.png"></a>
+		<a href="${menuURL }"><img alt="" src=<c:url value='/resources/images/home.png'/>></a>
 	</div>
 </div>
 <h1>New route created!</h1>

@@ -5,7 +5,7 @@
     outline:none;
 }
 body{
-    background:#c7b39b url(images/Auth.jpg);
+    background:url(images/Auth.jpg);
     font-family:"PT sans" sans-serif;
     background-size: cover;
 }

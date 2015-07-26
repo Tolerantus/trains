@@ -5,11 +5,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel='stylesheet' href='resources/TrainCreator.css'>
+<link rel='stylesheet' href=<c:url value='/resources/TrainCreator.css'/>>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="resources/TrainCreator.js"></script>
+<script type="text/javascript" src=<c:url value='/resources/TrainCreator.js'/>></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Train creator</title>
 </head>
@@ -17,11 +17,11 @@
 <c:if test="${user!=null}">
 <c:if test="${admin==true }">
 <div id="top-menu">
-	<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+	<div class="user"><img alt="" src=<c:url value='/resources/images/1.png'/>><span class="user"><%=session.getAttribute("user")%></span></div>
 	<div >
 		<div id="menu">
 			<c:url var="menuURL" value="/menu"/>
-			<a href="${menuURL }"><img alt="" src="resources/images/home.png"></a>
+			<a href="${menuURL }"><img alt="" src=<c:url value='/resources/images/home.png'/>></a>
 		</div>
 	</div>
 </div>

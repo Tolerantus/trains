@@ -18,15 +18,9 @@ public class RouteCreator {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(RouteCreator.class);
 
-//	public RouteCreator(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
 	@Transactional
 	public  RouteStationList append(NewRouteStartAndFinish dto){
-//		try {
-//			dao.begin();
+
 			LOG.debug(dto);
 			RouteStationList routeStationList = new RouteStationList(null);
 			String typed_dep = dto.getTyped_dep();
@@ -83,11 +77,7 @@ public class RouteCreator {
 				route.add(finish.getStation_name());
 				routeStationList.setRoute(route);
 				LOG.debug(routeStationList);
-//				dao.commit();
 				return routeStationList;
 			}
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

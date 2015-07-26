@@ -2,15 +2,17 @@
     pageEncoding="utf-8"%>
     <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page isELIgnored="false"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="resources/Validation Error.css">
+<link rel="stylesheet" href=<c:url value='/resources/ValidationError.css'/>>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="resources/StationAdding.css">
+
+<link rel="stylesheet" href=<c:url value='/resources/StationAdding.css'/>>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src = <c:url value='/resources/StationAdding.js'/>></script>
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Add new stations</title>
 </head>
@@ -19,23 +21,23 @@
 <c:if test="${user!=null}">
 <c:if test="${admin==true }">
 <div id="top-menu">
-	<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+	<div class="user"><img alt="" src=<c:url value='/resources/images/1.png'/>><span class="user"><%=session.getAttribute("user")%></span></div>
 	<div >
 		<div id="menu">
 			<c:url var="menuURL" value="/menu"/>
-			<a href="${menuURL }"><img alt="" src="resources/images/home.png"></a>
+			<a href="${menuURL }"><img alt="" src=<c:url value='/resources/images/home.png'/>></a>
 		</div>
 	</div>
 </div>
 <h1>Add stations</h1>
 <div class="route" align="center">
-<img alt="" src="resources/images/start.png" class="flag">
+<img alt="" src=<c:url value='/resources/images/start.png'/> class="flag">
 	<ul>
 		<c:forEach var="st" items="${sessionScope.newRoute}">
 					<li><b>${st}</b></li>
 		</c:forEach>
 	</ul>
-	<img alt="" src="resources/images/stop.png" class="flag">
+	<img alt="" src=<c:url value='/resources/images/stop.png'/> class="flag">
 </div>
 <div align="center">
 <c:url var="insertStationURL" value="/newRoute/newStartAndFinish/newStation"/>
@@ -83,7 +85,6 @@
 </div>	
 	
 	
-<script type="text/javascript" src = "resources/StationAdding.js"></script>
 </c:if>
 <c:if test="${admin==false }">
 <h3 align="center" style="color:red">You do not have permission to view this page!</h3>

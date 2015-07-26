@@ -143,7 +143,7 @@ public class SpringController {
 			model.addAttribute("error", true);
 			if (singleStation != null)
 			model.addAttribute("simpleShedule", true);
-			return "StationChoose";
+			return "stationChoose";
 		}else{
 			model.addAttribute("st_dep", st_dep);
 			model.addAttribute("st_arr", st_arr);
@@ -174,7 +174,7 @@ public class SpringController {
 		}
 		session.setAttribute("journeyData", journey.getJourneyId());
 		session.setAttribute("emptySeats", journey.getEmptySeats());
-		return "PassengerRegistration";
+		return "passengerRegistration";
 	}
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/appropriateJourneys/buyTicket/passenger", method = RequestMethod.POST)
@@ -474,8 +474,8 @@ public class SpringController {
 	@RequestMapping(value="/initDB", method = RequestMethod.POST)
 	public String initDB(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("user")!=null)
-			try {
+		if (session.getAttribute("user") != null)
+			try { 
 				dispatcher.service(new InitDBRequest());
 			} catch (Exception e) {
 				LOG.error(e);

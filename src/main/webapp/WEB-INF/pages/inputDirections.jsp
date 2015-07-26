@@ -7,11 +7,11 @@
 <html>
 <head>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="resources/inputDirections.js"></script>
+<script type="text/javascript" src=<c:url value='/resources/inputDirections.js'/>></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" href="resources/Validation Error.css">
+<link rel="stylesheet" href=<c:url value='/resources/ValidationError.css'/>>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="resources/InputDirection.css">
+<link rel="stylesheet" href=<c:url value='/resources/InputDirection.css'/>>
 <title>Input direction data</title>
 </head>
 
@@ -19,11 +19,11 @@
 <c:if test="${user!=null}">
 <c:if test="${admin==true }">
 <div id="top-menu">
-	<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+	<div class="user"><img alt="" src=<c:url value='/resources/images/1.png'/>><span class="user"><%=session.getAttribute("user")%></span></div>
 	<div >
 		<div id="menu">
 			<c:url var="menuURL" value="/menu"/>
-			<a href="${menuURL }"><img alt="" src="resources/images/home.png"></a>
+			<a href="${menuURL }"><img alt="" src=<c:url value='/resources/images/home.png'/>></a>
 		</div>
 	</div>
 </div>

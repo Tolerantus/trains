@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="resources/Menu.css">
+<link rel="stylesheet" href=<c:url value='/resources/Menu.css'/>>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
 <c:url var="findJourneyURL" value="/stationsChoosing"/>
 <c:url var="checkTicketsURL" value="/myTickets"/>
 <c:if test="${user!=null}">
-<div class="user"><img alt="" src="resources/images/1.png"><span class="user"><%=session.getAttribute("user")%></span></div>
+<div class="user"><img alt="" src=<c:url value='/resources/images/1.png'/>><span class="user"><%=session.getAttribute("user")%></span></div>
 <div class="wrapper">
 	<div class="menu-item">
 		<form action="${getShedule }" method="post">
