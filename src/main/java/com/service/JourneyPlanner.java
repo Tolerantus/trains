@@ -22,22 +22,17 @@ import com.entities.Train;
 public class JourneyPlanner {
 	@Autowired
 	private Dao dao;
-	private static final Logger log = Logger.getLogger(JourneyPlanner.class);
-
-//	public JourneyPlanner(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
+	private static final Logger LOG = Logger.getLogger(JourneyPlanner.class);
 
 	@Transactional
 	public  NewJourneyInfo plan(NewJourneyInfo dto) throws ParseException{
-//		try {
-//			dao.begin();
-			log.debug(dto);
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			String routeInfo = dto.getRouteInfo();
 			String date = dto.getDate();
 			String time = dto.getTime();
-			if (date != "" && time != "") {
+			if (!date.equals("") && !time.equals("")) {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				String[] hoursAndMinutes = time.split(":");
 				Integer h = Integer.parseInt(hoursAndMinutes[0]);
@@ -95,7 +90,9 @@ public class JourneyPlanner {
 					}
 					if (train == null) {
 						dto.setTrainsLack(true);
-//						dao.commit();
+						LOG.debug("=====================================================================");
+						LOG.debug(dto);
+						LOG.debug("=====================================================================");
 						return dto;
 					} else {
 						Journey j = dao.createJourney(train.getTrain_id(),
@@ -112,20 +109,22 @@ public class JourneyPlanner {
 						dto.setRouteName(route.getRoute_name());
 						dto.setDate(sdf2.format(departureDate));
 						dto.setTrain(String.valueOf(train.getTrain_id()));
-						log.debug(dto);
-//						dao.commit();
+						LOG.debug("=====================================================================");
+						LOG.debug(dto);
+						LOG.debug("=====================================================================");
 						return dto;
 					}
 				} else {
-//					dao.commit();
+					LOG.debug("=====================================================================");
+					LOG.debug(dto);
+					LOG.debug("=====================================================================");
 					return dto;
 				}
 			} else {
-//				dao.commit();
+				LOG.debug("=====================================================================");
+				LOG.debug(dto);
+				LOG.debug("=====================================================================");
 				return dto;
 			}
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

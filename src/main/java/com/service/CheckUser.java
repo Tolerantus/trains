@@ -17,8 +17,6 @@ public class CheckUser {
 
 	@Transactional
 	public UserExist check(UserInfo dto){
-//		try {
-//			dao.begin();
 			String login = dto.getLogin();
 			boolean isExist = false;
 			boolean isAdmin = false;
@@ -27,10 +25,6 @@ public class CheckUser {
 				isExist = true;
 				isAdmin = user.getAccount_type();
 			}
-//			dao.commit();
 			return new UserExist(isExist, isAdmin);
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

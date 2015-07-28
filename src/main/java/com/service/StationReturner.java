@@ -16,23 +16,16 @@ public class StationReturner {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(StationReturner.class);
 
-//public StationReturner(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
-@Transactional
-public   StationContainer getStations(StationContainer dto){
-//	try {
-//		dao.begin();
+	@Transactional
+	public   StationContainer getStations(StationContainer dto){
+		LOG.debug("=====================================================================");
 		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 		List<Station> allStations = dao.getAllStations();
 		dto.setStations(allStations);
+		LOG.debug("=====================================================================");
 		LOG.debug(dto);
-//		dao.commit();
+		LOG.debug("=====================================================================");
 		return dto;
-//	} finally {
-//		dao.close();
-//	}
-}
+	}
 }

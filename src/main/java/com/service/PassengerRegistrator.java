@@ -23,11 +23,6 @@ public class PassengerRegistrator {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(PassengerRegistrator.class);
 
-//	public PassengerRegistrator(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
 /*input data like:
  * currentUser:"root",
  * passengerDepAndDestStations:"journeyId;step_dep;step_arr;st_dep;st_arr"
@@ -40,10 +35,10 @@ public class PassengerRegistrator {
  * */
 	@Transactional
 	public  TicketInfo register(PassengerInfo dto) throws ParseException{
-		
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
+
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			TicketInfo info = new TicketInfo(null, false);
 			String month = dto.getMonth();
 			String day = dto.getDay();
@@ -123,11 +118,9 @@ public class PassengerRegistrator {
 				ticketInfo.append(cost);
 				info.setTicketInfo(ticketInfo.toString());
 			}
+			LOG.debug("=====================================================================");
 			LOG.debug(info);
-//			dao.commit();
+			LOG.debug("=====================================================================");
 			return info;
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

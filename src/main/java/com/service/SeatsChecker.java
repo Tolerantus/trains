@@ -19,7 +19,9 @@ private static final Logger LOG = Logger.getLogger(SeatsChecker.class);
 
 	@Transactional
 	public   ChoosedJourney check(ChoosedJourney dto){
-			LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			String journeyId = dto.getJourneyId();
 			Journey j = dao.getJourney(Integer.parseInt(journeyId));
 			List<String> journeys = dto.getJourneys();
@@ -45,7 +47,9 @@ private static final Logger LOG = Logger.getLogger(SeatsChecker.class);
 				dto.setJourneyId(journeyData);
 				dto.setEmptySeats(emptySeats);
 			}
+			LOG.debug("=====================================================================");
 			LOG.debug(dto);
+			LOG.debug("=====================================================================");
 			return dto;
 	}
 }

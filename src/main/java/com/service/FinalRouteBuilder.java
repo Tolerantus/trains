@@ -20,16 +20,12 @@ public class FinalRouteBuilder {
 	@Autowired
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(FinalRouteBuilder.class);
-	
-//	public FinalRouteBuilder(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
+
 	@Transactional
 	public  NewRouteSummary build(RequiredDataForNewRoute dto){
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			List<String> newRoute = dto.getNewRoute();
 			List<String> newDirections = dto.getNewDirections();
 			boolean error = false;
@@ -82,16 +78,14 @@ public class FinalRouteBuilder {
 				for (String station : newRoute) {
 					routeInfo.add(station);
 				}
+				LOG.debug("=====================================================================");
 				LOG.debug(routeInfo);
+				LOG.debug("=====================================================================");
 				LOG.info("Route created");
-//				dao.commit();
 				return new NewRouteSummary(routeInfo);
 			} else {
 				return new NewRouteSummary(null);
 			}
-//		} finally {
-//			dao.close();
-//		}
 	}
 	private  boolean isDirectionExist(int st_dep, int st_arr){
 		boolean isExist = false;

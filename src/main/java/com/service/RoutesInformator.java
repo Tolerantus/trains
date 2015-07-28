@@ -21,16 +21,12 @@ public class RoutesInformator {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(RoutesInformator.class);
 
-//	public RoutesInformator(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
 	@Transactional
 	public   AllRoutesInfo getInfo(AllRoutesInfo dto){
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
+
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			Map<Integer, String> routes = new HashMap<Integer, String>();
 			if (!dao.getAllRoutes().isEmpty()) {
 				for (Route r : dao.getAllRoutes()) {
@@ -52,11 +48,9 @@ public class RoutesInformator {
 				}
 				dto.setRoutes(routes);
 			}
+			LOG.debug("=====================================================================");
 			LOG.debug(dto);
-//			dao.commit();
+			LOG.debug("=====================================================================");
 			return dto;
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

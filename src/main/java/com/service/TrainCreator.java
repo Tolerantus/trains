@@ -15,7 +15,9 @@ public class TrainCreator {
 
 	@Transactional
 	public   void create(NewTrainInfo dto){
-			LOG.debug(dto);
-			dao.createTrain(Integer.parseInt(dto.getTrainCapacity()));
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		dao.createTrain(Integer.parseInt(dto.getTrainCapacity()));
 	}
 }

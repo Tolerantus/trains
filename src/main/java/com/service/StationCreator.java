@@ -14,16 +14,12 @@ public class StationCreator {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(StationCreator.class);
 
-//	public StationCreator(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
 	@Transactional
 	public   NewStationInfo create(NewStationInfo dto){
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
+
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			String stationName = dto.getStation();
 			boolean isExist = false;
 			for (Station s : dao.getAllStations()) {
@@ -37,11 +33,9 @@ public class StationCreator {
 			} else {
 				dto.setExist(true);
 			}
+			LOG.debug("=====================================================================");
 			LOG.debug(dto);
-//			dao.commit();
+			LOG.debug("=====================================================================");
 			return dto;
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

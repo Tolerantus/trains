@@ -21,54 +21,56 @@ public class RouteCreator {
 	@Transactional
 	public  RouteStationList append(NewRouteStartAndFinish dto){
 
-			LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			RouteStationList routeStationList = new RouteStationList(null);
-			String typed_dep = dto.getTyped_dep();
-			String typed_arr = dto.getTyped_arr();
-			String select_dep = dto.getSelect_dep();
-			String select_arr = dto.getSelect_arr();
+			String typedDep = dto.getTyped_dep();
+			String typedArr = dto.getTyped_arr();
+			String selectDep = dto.getSelect_dep();
+			String selectArr = dto.getSelect_arr();
 			List<Station> allStations = dao.getAllStations();
-			if (allStations == null && typed_dep == "" && typed_arr == "") {
+			if (allStations == null && typedDep.equals("") && typedArr.equals("")) {
 				return routeStationList;
 			} else {
 
-				boolean is_st_dep_exist = false;
-				boolean is_st_arr_exist = false;
+				boolean isStDepExist = false;
+				boolean isStArrExist = false;
 
-				if (typed_dep != "") {
+				if (!typedDep.equals("")) {
 					for (Station station : allStations) {
-						if (station.getStation_name().equals(typed_dep)) {
-							is_st_dep_exist = true;
+						if (station.getStation_name().equals(typedDep)) {
+							isStDepExist = true;
 						}
 					}
 				}
-				if (typed_arr != "") {
+				if (!typedArr.equals("")) {
 					for (Station station : allStations) {
-						if (station.getStation_name().equals(typed_arr)) {
-							is_st_arr_exist = true;
+						if (station.getStation_name().equals(typedArr)) {
+							isStArrExist = true;
 						}
 					}
 				}
 
 				Station start = null;
 				Station finish = null;
-				if (typed_arr == "") {
-					finish = dao.getStationByName(select_arr);
+				if (typedArr.equals("")) {
+					finish = dao.getStationByName(selectArr);
 				} else {
-					if (!is_st_arr_exist) {
-						finish = dao.createStation(typed_arr);
+					if (!isStArrExist) {
+						finish = dao.createStation(typedArr);
 					} else {
-						finish = dao.getStationByName(typed_arr);
+						finish = dao.getStationByName(typedArr);
 					}
 				}
 
-				if (typed_dep == "") {
-					start = dao.getStationByName(select_dep);
+				if (typedDep.equals("")) {
+					start = dao.getStationByName(selectDep);
 				} else {
-					if (!is_st_dep_exist) {
-						start = dao.createStation(typed_dep);
+					if (!isStDepExist) {
+						start = dao.createStation(typedDep);
 					} else {
-						start = dao.getStationByName(typed_dep);
+						start = dao.getStationByName(typedDep);
 					}
 				}
 
@@ -76,7 +78,9 @@ public class RouteCreator {
 				route.add(start.getStation_name());
 				route.add(finish.getStation_name());
 				routeStationList.setRoute(route);
+				LOG.debug("=====================================================================");
 				LOG.debug(routeStationList);
+				LOG.debug("=====================================================================");
 				return routeStationList;
 			}
 	}

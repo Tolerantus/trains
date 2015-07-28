@@ -17,22 +17,17 @@ public class RouteStationInjector {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(RouteStationInjector.class);
 
-//	public RouteStationInjector(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
 	@Transactional
 	public   RouteStationList inject(StationForInsertInRoute dto){
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			String newStation = dto.getNewStation();
 			String selectedStation = dto.getSelectedStation();
 			int step = Integer.parseInt(dto.getStep());
 			RouteStationList route = dto.getRoute();
 			boolean isNewStationNew = true;
-			if (newStation != "") {
+			if (newStation.equals("")) {
 				for (Station s : dao.getAllStations()) {
 					if (s.getStation_name().equals(newStation)) {
 						isNewStationNew = false;
@@ -40,7 +35,7 @@ public class RouteStationInjector {
 				}
 			}
 			Station stationForInsert = null;
-			if (newStation == "") {
+			if (newStation.equals("")) {
 				stationForInsert = dao.getStationByName(selectedStation);
 			} else {
 				if (isNewStationNew) {
@@ -54,11 +49,9 @@ public class RouteStationInjector {
 				newRoute.add(step + 1, stationForInsert.getStation_name());
 			}
 			route.setRoute(newRoute);
+			LOG.debug("=====================================================================");
 			LOG.debug(route);
-//			dao.commit();
+			LOG.debug("=====================================================================");
 			return route;
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

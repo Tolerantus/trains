@@ -26,29 +26,21 @@ public class TicketsChecker {
 	@Autowired
 	private Dao dao;	
 	private static final Logger LOG = Logger.getLogger(TicketsChecker.class);
-	
-//	public TicketsChecker(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
+
 	@Transactional
 	public ListOfTickets check(UserLoginContainer dto){
-		
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
-			String username = dto.getLogin();
-			User u = dao.getUserByName(username);
-			List<Ticket> tickets = dao.getTicketOfUser(u.getUser_id());
-			List<String> ticketsData = getTicketData(tickets);
-			ListOfTickets list = new ListOfTickets(ticketsData);
-			LOG.debug(list);
-//			dao.commit();
-			return list;
-//		} finally {
-//			dao.close();
-//		}
-		
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		String username = dto.getLogin();
+		User u = dao.getUserByName(username);
+		List<Ticket> tickets = dao.getTicketOfUser(u.getUser_id());
+		List<String> ticketsData = getTicketData(tickets);
+		ListOfTickets list = new ListOfTickets(ticketsData);
+		LOG.debug("=====================================================================");
+		LOG.debug(list);
+		LOG.debug("=====================================================================");
+		return list;
 	}
 	private  List<String> getTicketData(List<Ticket> tickets){
 		if (tickets==null){
@@ -111,11 +103,8 @@ public class TicketsChecker {
 				sb.append(",");
 				sb.append(cost);
 				ticketData.add(sb.toString());
-				
 			}
-			
 			return ticketData;
 		}
-		
 	}
 }

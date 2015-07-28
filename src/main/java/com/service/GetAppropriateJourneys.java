@@ -26,15 +26,12 @@ public class GetAppropriateJourneys {
 	@Autowired
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(GetAppropriateJourneys.class);
-//	public GetAppropriateJourneys(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
+
 	@Transactional
 public  JourneysInfo getJourneys(StationsForSheduling dto) throws ParseException{
-//	try {
-//		dao.begin();
+		LOG.debug("=====================================================================");
 		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 		String station = dto.getSingleStation();
 		String st_dep = dto.getSt_dep();
 		String st_arr = dto.getSt_arr();
@@ -43,18 +40,17 @@ public  JourneysInfo getJourneys(StationsForSheduling dto) throws ParseException
 		if (station != null) {
 			stationForSimpleShedule = dao.getStationByName(station);
 			JourneysInfo info = simpleSheduling(stationForSimpleShedule);
+			LOG.debug("=====================================================================");
 			LOG.debug(info);
-//			dao.commit();
+			LOG.debug("=====================================================================");
 			return info;
 		} else {
 			JourneysInfo info = getAppropriateJourneys(dao.getStationByName(st_dep), dao.getStationByName(st_arr), date);
+			LOG.debug("=====================================================================");
 			LOG.debug(info);
-//			dao.commit();
+			LOG.debug("=====================================================================");
 			return info;
 		}
-//	} finally {
-//		dao.close();
-//	}
 }
 public JourneysInfo simpleSheduling(Station station){
 	List<Route> appropriateRoutes = new ArrayList<Route>();
@@ -213,7 +209,7 @@ public  JourneysInfo getAppropriateJourneys(Station st_dep, Station st_arr, Stri
 						cost+=d.getCost();
 					}
 				}
-				if (date!=""){
+				if (!date.equals("")){
 					Date targetedDateBegin = sdf.parse(date);
 					
 					Date targetedDateEnd = new Date(targetedDateBegin.getTime()+24*60*60*1000);

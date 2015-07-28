@@ -17,32 +17,23 @@ public class JourneyBriefer {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(JourneyBriefer.class);
 
-
-//	public JourneyBriefer(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
-
 	@Transactional
 	public  AllJourneysInfo getInfo(AllJourneysInfo dto){
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
-			List<Journey> journeys = dao.getAllJourneys();
-			List<String> journeyNames = new ArrayList<String>();
-			if (!journeys.isEmpty()) {
-				for (Journey j : journeys) {
-					journeyNames.add(j.getJourney_id() + " "
-							+ dao.getRoute(j.getRoute_id()).getRoute_name());
-				}
-				dto.setJourneys(journeyNames);
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		List<Journey> journeys = dao.getAllJourneys();
+		List<String> journeyNames = new ArrayList<String>();
+		if (!journeys.isEmpty()) {
+			for (Journey j : journeys) {
+				journeyNames.add(j.getJourney_id() + " "
+						+ dao.getRoute(j.getRoute_id()).getRoute_name());
 			}
-			LOG.debug(dto);
-//			dao.commit();
-			return dto;
-//		} finally {
-//			dao.close();
-//		}
+			dto.setJourneys(journeyNames);
+		}
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		return dto;
 	}
 }

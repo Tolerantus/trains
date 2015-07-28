@@ -20,16 +20,12 @@ public class PassengersInformator {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(PassengersInformator.class);
 
-//	public PassengersInformator(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
 	@Transactional
 	public  JourneyAndPassengers getInfo(JourneyAndPassengers dto){
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
+
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			String journeyInfo = dto.getJourneyInfo();
 			String[] tokens = journeyInfo.split(" ");
 			Journey j = dao.getJourney(Integer.parseInt(tokens[0]));
@@ -53,16 +49,15 @@ public class PassengersInformator {
 				}
 
 				dto.setPassInfo(passInfo);
+				LOG.debug("=====================================================================");
 				LOG.debug(dto);
-//				dao.commit();
+				LOG.debug("=====================================================================");
 				return dto;
 			} else {
+				LOG.debug("=====================================================================");
 				LOG.debug(dto);
-//				dao.commit();
+				LOG.debug("=====================================================================");
 				return dto;
 			}
-//		} finally {
-//			dao.close();
-//		}
 	}
 }

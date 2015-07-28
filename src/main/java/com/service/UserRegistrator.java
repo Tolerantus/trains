@@ -14,33 +14,22 @@ import com.entities.Dao;
 import com.entities.User;
 @Service("userRegistrator")
 public class UserRegistrator {
-	@Resource(name="dao")
-	private Dao dao;
-	private static final Logger LOG = Logger.getLogger(UserRegistrator.class);
+@Resource(name="dao")
+private Dao dao;
+private static final Logger LOG = Logger.getLogger(UserRegistrator.class);
 
-//public UserRegistrator(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
-@Transactional
-public   UserExist register(NewUserInfo dto){
-//	try {
-//		dao.begin();
-		User oldUser = null;
-		oldUser = dao.getUserByName(dto.getLogin());
-		UserExist user = null;
-		if (oldUser == null) {
-			dao.createUser(dto.getLogin(), dto.getPassword(), false);
-			LOG.info("User created");
-			user = new UserExist(false, false);
-		} else {
-			user = new UserExist(true, false);
-		}
-//		dao.commit();
-		return user;
-//	} finally {
-//		dao.close();
-//	}
-}
+	@Transactional
+	public   UserExist register(NewUserInfo dto){
+			User oldUser = null;
+			oldUser = dao.getUserByName(dto.getLogin());
+			UserExist user = null;
+			if (oldUser == null) {
+				dao.createUser(dto.getLogin(), dto.getPassword(), false);
+				LOG.info("User created");
+				user = new UserExist(false, false);
+			} else {
+				user = new UserExist(true, false);
+			}
+			return user;
+	}
 }

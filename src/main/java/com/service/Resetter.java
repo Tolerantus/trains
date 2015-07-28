@@ -13,26 +13,13 @@ public class Resetter {
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(Resetter.class);
 
-
-//	public Resetter(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
-
-
 	@Transactional
 	public  void reset(ResetRequest dto){
-//		try {
-//			dao.begin();
-			dao.clearStations();
-			dao.clearTrains();
-			dao.clearRoutes();
-			dao.clearPassengers();
-			dao.initUsers();
-			LOG.info("DB reset");
-//			dao.commit();
-//		} finally {
-//			dao.close();
-//		}
+		dao.clearStations();
+		dao.clearTrains();
+		dao.clearRoutes();
+		dao.clearPassengers();
+		dao.initUsers();
+		LOG.info("==========================================DB reset========================================");
 	}
 }

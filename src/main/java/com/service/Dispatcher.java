@@ -1,8 +1,5 @@
 package com.service;
 
-
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,11 +62,7 @@ public class Dispatcher {
 	private Resetter resetter;
 	@Autowired
 	private DBInitializer dbInitializer;
-//	public Dispatcher() {
-//		super();
-//		this.dao = new Dao();
-//	}
-
+	
 	public  Object service(Object dto) throws Exception{
 		if (dto instanceof UserInfo){
 			return checkUser.check((UserInfo)dto);

@@ -75,6 +75,7 @@ public class SpringController {
 			LOG.info("User " + login + " logged in");
 			session.setAttribute("user", login);
 			session.setAttribute("admin", user.isAdmin());
+			
 			return "Menu";
 		}else{
 			model.addAttribute("error", "invalid combination login/password");
@@ -109,7 +110,7 @@ public class SpringController {
 	}
 	@RequestMapping(value = "/schedule", method = RequestMethod.POST)
     public String getSchedule(HttpServletRequest request, Model model) {
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession();	
 		session.removeAttribute("allStations");
 		StationContainer container = new StationContainer(null);
 		try {

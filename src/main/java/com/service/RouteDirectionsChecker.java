@@ -18,15 +18,12 @@ public class RouteDirectionsChecker {
 	@Autowired
 	private Dao dao;
 	private static final Logger LOG = Logger.getLogger(RouteDirectionsChecker.class);
-//	public RouteDirectionsChecker(Dao dao) {
-//		super();
-//		this.dao = dao;
-//	}
+
 	@Transactional
 	public   DirectionData check(RouteStationList dto){
-//		try {
-//			dao.begin();
-			LOG.debug(dto);
+		LOG.debug("=====================================================================");
+		LOG.debug(dto);
+		LOG.debug("=====================================================================");
 			List<String> newRoute = dto.getRoute();
 			List<String> directionData = new ArrayList<String>();
 			for (int i = 0; i < newRoute.size() - 1; i++) {
@@ -49,12 +46,10 @@ public class RouteDirectionsChecker {
 				}
 			}
 			DirectionData d = new DirectionData(directionData);
-			LOG.debug(d);
-//			dao.commit();
+			LOG.debug("=====================================================================");
+			LOG.debug(dto);
+			LOG.debug("=====================================================================");
 			return d;
-//		} finally {
-//			dao.close();
-//		}
-		
+
 	}
 }
