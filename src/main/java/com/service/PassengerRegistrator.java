@@ -81,7 +81,7 @@ public class PassengerRegistrator {
 			if (!info.isExist()) {
 				Ticket newTicket = dao.createTicket(
 						newPassenger.getPassenger_id(), journeyId,
-						st_dep.getStation_id(), st_arr.getStation_id());
+						st_dep.getStation_id(), st_arr.getStation_id(), new Date());
 				User currentUser = dao.getUserByName(user);
 				dao.createUser_Ticket(newTicket.getTicket_id(),
 						currentUser.getUser_id());

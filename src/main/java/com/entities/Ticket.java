@@ -1,6 +1,7 @@
 package com.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -19,7 +20,8 @@ private int passenger_id;
 private int journey_id;
 private int st_dep;
 private int st_arr;
-	
+@Temporal(TemporalType.TIMESTAMP)
+private Date purchaseDate;	
 
 @Override
 public int hashCode() {
@@ -43,14 +45,27 @@ public boolean equals(Object obj) {
 	return true;
 }
 
+
+
 public Ticket(int ticket_id, int passenger_id, int journey_id, int st_dep,
-		int st_arr) {
+		int st_arr, Date purchaseDate) {
 	super();
 	this.ticket_id = ticket_id;
 	this.passenger_id = passenger_id;
 	this.journey_id = journey_id;
 	this.st_dep = st_dep;
 	this.st_arr = st_arr;
+	this.purchaseDate = purchaseDate;
+}
+
+
+
+public Date getPurchaseDate() {
+	return purchaseDate;
+}
+
+public void setPurchaseDate(Date purchaseDate) {
+	this.purchaseDate = purchaseDate;
 }
 
 public int getTicket_id() {

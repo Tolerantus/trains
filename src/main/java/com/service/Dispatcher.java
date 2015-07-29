@@ -20,6 +20,7 @@ import com.dto.RouteStationList;
 import com.dto.StationContainer;
 import com.dto.StationForInsertInRoute;
 import com.dto.StationsForSheduling;
+import com.dto.TicketContainer;
 import com.dto.UserInfo;
 import com.dto.UserLoginContainer;
 @Service("dispatcher")
@@ -62,64 +63,69 @@ public class Dispatcher {
 	private Resetter resetter;
 	@Autowired
 	private DBInitializer dbInitializer;
+	@Autowired
+	private TicketService ticketService;
 	
 	public  Object service(Object dto) throws Exception{
 		if (dto instanceof UserInfo){
 			return checkUser.check((UserInfo)dto);
-		}else
+		} else
 		if (dto instanceof NewUserInfo){
 			return userRegistrator.register((NewUserInfo)dto);
-		}else
+		} else
 		if (dto instanceof StationContainer){
 			return stationReturner.getStations((StationContainer)dto);
-		}else
+		} else
 		if (dto instanceof StationsForSheduling){
 			return getAppropriateJourneys.getJourneys((StationsForSheduling) dto);
-		}else
+		} else
 		if (dto instanceof ChoosedJourney){
 			return seatsChecker.check((ChoosedJourney) dto);
-		}else
+		} else
 		if (dto instanceof PassengerInfo){
 			return passengerRegistrator.register((PassengerInfo) dto);
-		}else
+		} else
 		if (dto instanceof UserLoginContainer){
 			return ticketsChecker.check((UserLoginContainer) dto);
-		}else
+		} else
 		if (dto instanceof NewRouteStartAndFinish){
 			return routeCreator.append((NewRouteStartAndFinish) dto);
-		}else
+		} else
 		if (dto instanceof StationForInsertInRoute){
 			return routeStationInjector.inject((StationForInsertInRoute) dto);
-		}else
+		} else
 		if (dto instanceof RouteStationList){
 			return routeDirectionsChecker.check((RouteStationList) dto);
-		}else
+		} else
 		if (dto instanceof RequiredDataForNewRoute){
 			return finalRouteBuilder.build((RequiredDataForNewRoute) dto);
-		}else
+		} else
 		if (dto instanceof NewTrainInfo){
 			trainCreator.create((NewTrainInfo) dto);
-		}else
+		} else
 		if (dto instanceof AllRoutesInfo){
 			return routesInformator.getInfo((AllRoutesInfo) dto);
-		}else
+		} else
 		if (dto instanceof NewJourneyInfo){
 			return journeyPlanner.plan((NewJourneyInfo) dto);
-		}else
+		} else
 		if (dto instanceof NewStationInfo){
 			return stationCreator.create((NewStationInfo) dto);
-		}else
+		} else
 		if (dto instanceof AllJourneysInfo){
 			return journeyBriefer.getInfo((AllJourneysInfo) dto);
-		}else
+		} else
 		if (dto instanceof JourneyAndPassengers){
 			return passengersInformator.getInfo((JourneyAndPassengers) dto);
-		}else
+		} else
 		if (dto instanceof ResetRequest){
 			resetter.reset((ResetRequest) dto);
-		}else
+		} else
 		if (dto instanceof InitDBRequest){
 			dbInitializer.init((InitDBRequest) dto);
+		} else
+		if (dto instanceof TicketContainer) {
+			return ticketService.dispatch((TicketContainer) dto);
 		}
 	return null;
 	}

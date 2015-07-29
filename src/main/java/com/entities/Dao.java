@@ -10,9 +10,12 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.annotation.Resource;
+
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 @Repository("dao")
@@ -439,13 +442,14 @@ public void clearUsers() {
 		session.delete(u);
 	}
 }
-public Ticket createTicket( int passenger_id,  int journey_id,  int st_dep,  int st_arr) {
+public Ticket createTicket( int passenger_id,  int journey_id,  int st_dep,  int st_arr, Date purchaseDate) {
 	Session session = sessionFactory.getCurrentSession();
 	Ticket t = new Ticket();
 	t.setPassenger_id(passenger_id);
 	t.setJourney_id(journey_id);
 	t.setSt_dep(st_dep);
 	t.setSt_arr(st_arr);
+	t.setPurchaseDate(purchaseDate);
 	session.save(t);
 	return t;
 }
@@ -470,6 +474,28 @@ public List<Ticket> getTicketOfUser( int user_id) {
 	}
 	return tickets;
 }
+@SuppressWarnings("unchecked")
+public List<Ticket> getTicketsBetweenDates(Date startDate, Date stopDate) {
+	Criteria crit = sessionFactory.getCurrentSession().createCriteria(Ticket.class);
+	crit.add(Restrictions.between("purchaseDate", startDate, stopDate));
+	return crit.list();
+}
+
+@SuppressWarnings("unchecked")
+public List<Ticket> getTicketsBefore(Date stopDate) {
+	Criteria crit = sessionFactory.getCurrentSession().createCriteria(Ticket.class);
+	crit.add(Restrictions.le("purchaseDate", stopDate));
+	return crit.list();
+}
+
+@SuppressWarnings("unchecked")
+public List<Ticket> getTicketsAfter(Date startDate) {
+	Criteria crit = sessionFactory.getCurrentSession().createCriteria(Ticket.class);
+	crit.add(Restrictions.ge("purchaseDate", startDate));
+	return crit.list();
+}
+
+
 
 @SuppressWarnings("unchecked")
 public void initTickets() throws ParseException {
@@ -502,7 +528,7 @@ public void initTickets() throws ParseException {
 				j.getJourney_id(), route_beginning_d.getSt_dep(), route_ending_d.getSt_arr());
 		if (trainHasEmptySeats) {
 		Ticket t = createTicket(p.getPassenger_id(), j.getJourney_id(),
-				route_beginning_d.getSt_dep(), route_ending_d.getSt_arr());
+				route_beginning_d.getSt_dep(), route_ending_d.getSt_arr(), new Date());
 		createUser_Ticket(t.getTicket_id(), u.getUser_id());
 		}
 	}
@@ -635,6 +661,4 @@ public void initDatabase() throws ParseException{
 	initUsers();
 	initTickets();
 }
-
-
 }
