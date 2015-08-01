@@ -22,17 +22,17 @@ JourneyBriefer briefer;
 Dao dao = Mockito.mock(Dao.class);
 @Before
 public void init(){
-	briefer = new JourneyBriefer(dao);
+	briefer = new JourneyBriefer();
+	briefer.setDao(dao);
 }
 	@Test
 	public void test() {
 		List<Journey> jours = new ArrayList<Journey>();
-		Route r = new Route();r.setRoute_id(1);r.setRoute_name("name");
-		Journey j = new Journey(); j.setRoute_id(r.getRoute_id());jours.add(j);
-		String journeyName = j.getJourney_id()+" "+ r.getRoute_name();
+		Route r = new Route();r.setRouteId(1); r.setRouteName("name");
+		Journey j = new Journey(); j.setRoute(r); jours.add(j);
+		String journeyName = j.getJourneyId()+" "+ r.getRouteName();
 		
 		Mockito.when(dao.getAllJourneys()).thenReturn(jours);
-		Mockito.when(dao.getRoute(r.getRoute_id())).thenReturn(r);
 		AllJourneysInfo info = new AllJourneysInfo(null);
 		info = briefer.getInfo(info);
 		Assert.assertTrue(info.getJourneys().get(0).equals(journeyName));
@@ -41,11 +41,10 @@ public void init(){
 	@Test(expected=NullPointerException.class)
 	public void test2(){
 		List<Journey> jours = new ArrayList<Journey>();
-		Route r = new Route();r.setRoute_id(1);r.setRoute_name("name");
-		Journey j = new Journey(); j.setRoute_id(r.getRoute_id());jours.add(j);
+		Route r = new Route(); r.setRouteId(1); r.setRouteName("name");
+		Journey j = new Journey(); j.setRoute(r); jours.add(j);
 		
 		Mockito.when(dao.getAllJourneys()).thenReturn(jours);
-		Mockito.when(dao.getRoute(r.getRoute_id())).thenReturn(r);
 		briefer.getInfo(null);
 	}
 

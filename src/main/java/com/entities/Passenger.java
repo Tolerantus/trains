@@ -14,37 +14,25 @@ import javax.persistence.*;
 public class Passenger implements Serializable {
 @Id
 @GeneratedValue (strategy=GenerationType.AUTO)
-private int passenger_id;
-private String passenger_name;
-private String passenger_surname;
+@Column(name = "passenger_id")
+private int passengerId;
+
+@Column(name = "passenger_name")
+private String passengerName;
+
+@Column(name = "passenger_surname")
+private String passengerSurname;
+
 @Temporal(TemporalType.TIMESTAMP)
-private Date passenger_birthday;
-public String getPassenger_surname() {
-	return passenger_surname;
-}
-
-public void setPassenger_surname(String passenger_surname) {
-	this.passenger_surname = passenger_surname;
-}
-
-public Date getPassenger_birthday() {
-	return passenger_birthday;
-}
-
-public void setPassenger_birthday(Date passenger_birthday) {
-	this.passenger_birthday = passenger_birthday;
-}
+@Column(name = "passenger_birthday")
+private Date passengerBirthday;
 
 private static final long serialVersionUID = 1L;
 public Passenger(int passenger_id, String passenger_name) {
 	super();
-	this.passenger_id = passenger_id;
-	this.passenger_name = passenger_name;
+	this.passengerId = passenger_id;
+	this.passengerName = passenger_name;
 }
-
-
-
-
 
 	@Override
 public int hashCode() {
@@ -52,11 +40,11 @@ public int hashCode() {
 	int result = 1;
 	result = prime
 			* result
-			+ ((passenger_birthday == null) ? 0 : passenger_birthday.hashCode());
+			+ ((passengerBirthday == null) ? 0 : passengerBirthday.hashCode());
 	result = prime * result
-			+ ((passenger_name == null) ? 0 : passenger_name.hashCode());
+			+ ((passengerName == null) ? 0 : passengerName.hashCode());
 	result = prime * result
-			+ ((passenger_surname == null) ? 0 : passenger_surname.hashCode());
+			+ ((passengerSurname == null) ? 0 : passengerSurname.hashCode());
 	return result;
 }
 
@@ -69,20 +57,20 @@ public boolean equals(Object obj) {
 	if (getClass() != obj.getClass())
 		return false;
 	Passenger other = (Passenger) obj;
-	if (passenger_birthday == null) {
-		if (other.passenger_birthday != null)
+	if (passengerBirthday == null) {
+		if (other.passengerBirthday != null)
 			return false;
-	} else if (!passenger_birthday.equals(other.passenger_birthday))
+	} else if (!passengerBirthday.equals(other.passengerBirthday))
 		return false;
-	if (passenger_name == null) {
-		if (other.passenger_name != null)
+	if (passengerName == null) {
+		if (other.passengerName != null)
 			return false;
-	} else if (!passenger_name.equals(other.passenger_name))
+	} else if (!passengerName.equals(other.passengerName))
 		return false;
-	if (passenger_surname == null) {
-		if (other.passenger_surname != null)
+	if (passengerSurname == null) {
+		if (other.passengerSurname != null)
 			return false;
-	} else if (!passenger_surname.equals(other.passenger_surname))
+	} else if (!passengerSurname.equals(other.passengerSurname))
 		return false;
 	return true;
 }
@@ -91,20 +79,38 @@ public boolean equals(Object obj) {
 		super();
 	}
 
-	public int getPassenger_id() {
-		return passenger_id;
+	public int getPassengerId() {
+		return passengerId;
 	}
 
-	public void setPassenger_id(int passenger_id) {
-		this.passenger_id = passenger_id;
+	public void setPassengerId(int passengerId) {
+		this.passengerId = passengerId;
 	}
 
-	public String getPassenger_name() {
-		return passenger_name;
+	public String getPassengerName() {
+		return passengerName;
 	}
 
-	public void setPassenger_name(String passenger_name) {
-		this.passenger_name = passenger_name;
+	public void setPassengerName(String passengerName) {
+		this.passengerName = passengerName;
 	}
+
+	public String getPassengerSurname() {
+		return passengerSurname;
+	}
+
+	public void setPassengerSurname(String passengerSurname) {
+		this.passengerSurname = passengerSurname;
+	}
+
+	public Date getPassengerBirthday() {
+		return passengerBirthday;
+	}
+
+	public void setPassengerBirthday(Date passengerBirthday) {
+		this.passengerBirthday = passengerBirthday;
+	}
+
+	
    
 }

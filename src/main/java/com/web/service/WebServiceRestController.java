@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import com.service.Dispatcher;
 
 @RestController
 public class WebServiceRestController {
+	private static final Logger LOG = Logger.getLogger(WebServiceRestController.class);
 	@Autowired
 	private Dispatcher dispatcher;
 	
@@ -45,10 +47,14 @@ public class WebServiceRestController {
 		return buildResponse(container);
 	}
 	@RequestMapping("/test")
-	public Response getTicketsAfter() {
+	public Response getTicketsAfter(@RequestParam("startDate") String startDate, 
+			@RequestParam("stopDate") String stopDate, @RequestParam("train") String train) {
+		LOG.error(train.equals("undefined"));
+		
 		TicketContainer container = new TicketContainer();
-		container.setConstraints(TicketListConstraints.AFTER);
-		container.setStartDate("01/01/2015");
+		container.setConstraints(TicketListConstraints.BETWEEN);
+		container.setStartDate(startDate);
+		container.setStopDate(stopDate);
 		return buildResponse(container);
 		
 	}

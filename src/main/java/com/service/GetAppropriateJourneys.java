@@ -4,9 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,11 @@ import com.entities.Shedule;
 import com.entities.Station;
 @Service("getAppropriateJourneys")
 public class GetAppropriateJourneys {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(GetAppropriateJourneys.class);
 
 	@Transactional
@@ -33,8 +36,8 @@ public  JourneysInfo getJourneys(StationsForSheduling dto) throws ParseException
 		LOG.debug(dto);
 		LOG.debug("=====================================================================");
 		String station = dto.getSingleStation();
-		String st_dep = dto.getSt_dep();
-		String st_arr = dto.getSt_arr();
+		String stDep = dto.getStDep();
+		String stArr = dto.getStArr();
 		String date = dto.getDate();
 		Station stationForSimpleShedule = null;
 		if (station != null) {
@@ -45,70 +48,57 @@ public  JourneysInfo getJourneys(StationsForSheduling dto) throws ParseException
 			LOG.debug("=====================================================================");
 			return info;
 		} else {
-			JourneysInfo info = getAppropriateJourneys(dao.getStationByName(st_dep), dao.getStationByName(st_arr), date);
+			JourneysInfo info = getAppropriateJourneys(dao.getStationByName(stDep), dao.getStationByName(stArr), date);
 			LOG.debug("=====================================================================");
 			LOG.debug(info);
 			LOG.debug("=====================================================================");
 			return info;
 		}
 }
-public JourneysInfo simpleSheduling(Station station){
-	List<Route> appropriateRoutes = new ArrayList<Route>();
+public JourneysInfo simpleSheduling(Station station) {
+	
+	List<Route> appropriateRoutes = dao.getRoutesContainStation(station.getStationId());
+	Iterator<Route> iterator = appropriateRoutes.iterator();
+	while (iterator.hasNext()) {
+		Route r = iterator.next();
+		List<Shedule> steps = dao.getShedulesOfRoute(r.getRouteId());
+		Station lastStationOnRoute = steps.get(steps.size()-1).getDirection().getStArr();
+		if (station.equals(lastStationOnRoute)) {
+			iterator.remove();
+		}
+	}
 	JourneysInfo journeysInfo = new JourneysInfo(null, null);
-	List<Journey> appropriateJourneys = new ArrayList<Journey>();
+	List<Journey> appropriateJourneys = dao.getJourneysByRoutes(appropriateRoutes);
 	SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm  dd MMM", Locale.US);
-	for (Route r : dao.getAllRoutes()){
-		Set<Station> stationsOnRoute = dao.getAllStationsOnRoute(r.getRoute_id());
-		if (stationsOnRoute.contains(station)){
-			appropriateRoutes.add(r);
-		}
-	}
-	if (!appropriateRoutes.isEmpty()){
-		
-		for (Journey j : dao.getAllJourneys()){
-			if (appropriateRoutes.contains(dao.getRoute(j.getRoute_id()))){
-				
-				List<Shedule> steps = dao.getShedulesOfRoute(j.getRoute_id());
-				
-				for (Shedule step : steps){
-					Direction direction = dao.getDirection(step.getDirection_id());
-					if (direction.getSt_dep()==station.getStation_id()){
-						appropriateJourneys.add(j);
-					}
-				}
-			}
-		}
-	}else{
-		return journeysInfo;
-	}
+	
 	if (!appropriateJourneys.isEmpty()){
 		
 		List<String> journeyStringData = new ArrayList<String>();
 		for (Journey j : appropriateJourneys){
-			String id = String.valueOf(j.getJourney_id());
-			Date departure = j.getTime_dep();
+			String id = String.valueOf(j.getJourneyId());
+			Date departure = j.getTimeDep();
 			Station routeBeginning = null;
 			Station routeEnding = null;
-			List<Shedule> steps = dao.getShedulesOfRoute(j.getRoute_id());
+			List<Shedule> steps = dao.getShedulesOfRoute(j.getRoute().getRouteId());
 			int depStep = 0;
 			int lastStep = 0;
 			for (Shedule step : steps){
-				Direction d = dao.getDirection(step.getDirection_id());
+				Direction d = (step.getDirection());
 				if (step.getStep()==0){
-					routeBeginning = dao.getStation(d.getSt_dep());
+					routeBeginning = (d.getStDep());
 				}
 				lastStep = Math.max(lastStep, step.getStep());
 				if (lastStep==step.getStep()){
-					routeEnding = dao.getStation(d.getSt_arr());
+					routeEnding = (d.getStArr());
 				}
-				if (d.getSt_dep()==station.getStation_id()){
+				if (d.getStDep().getStationId() == station.getStationId()){
 					depStep=step.getStep();
 				}
 			}
 			for (Shedule step : steps){
-				Direction d = dao.getDirection(step.getDirection_id());
+				Direction d = (step.getDirection());
 				if (step.getStep()<depStep){
-					departure = new Date(departure.getTime()+d.getTime());
+					departure = new Date(departure.getTime() + d.getTime());
 				}
 			}
 			Date currentTime = new Date();
@@ -117,9 +107,9 @@ public JourneysInfo simpleSheduling(Station station){
 				journeyData.append(";");
 				journeyData.append(sdf1.format(departure));
 				journeyData.append(";");
-				journeyData.append(routeBeginning.getStation_name());
+				journeyData.append(routeBeginning.getStationName());
 				journeyData.append(";");
-				journeyData.append(routeEnding.getStation_name());
+				journeyData.append(routeEnding.getStationName());
 				journeyStringData.add(journeyData.toString());
 			}
 		}
@@ -133,89 +123,81 @@ public JourneysInfo simpleSheduling(Station station){
 	}
 }
 
-public  JourneysInfo getAppropriateJourneys(Station st_dep, Station st_arr, String date) throws ParseException{
+public  JourneysInfo getAppropriateJourneys(Station stDep, Station stArr, String date) throws ParseException{
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm dd MMM", Locale.US);
 	JourneysInfo journeysInfo = new JourneysInfo(null, null);
-	List<Route> appropriateRoutes = new ArrayList<Route>();
-	List<Journey> appropriateJourneys = new ArrayList<Journey>();
+	List<Route> appropriateRoutes = dao.getRoutesContainStations(stDep.getStationId(), stArr.getStationId());
+	List<Journey> appropriateJourneys = dao.getJourneysByRoutes(appropriateRoutes);
 	List<String> helpInfo = new ArrayList<String>();
-	for (Route r : dao.getAllRoutes()){
-		Set<Station> stationsOnRoute = dao.getAllStationsOnRoute(r.getRoute_id());
-		if (stationsOnRoute.contains(st_dep)&&stationsOnRoute.contains(st_arr)){
-			appropriateRoutes.add(r);
-		}
-	}
-	if (!appropriateRoutes.isEmpty()){
-		for (Journey j : dao.getAllJourneys()){
-			if (appropriateRoutes.contains(dao.getRoute(j.getRoute_id()))){
-				List<Shedule> steps = new ArrayList<Shedule>();
-				steps.addAll(dao.getShedulesOfRoute(j.getRoute_id()));
-				double departurePoint = 0;
-				double arrivalPoint = 0;
-				for (Shedule step : steps){
-					Direction direction = dao.getDirection(step.getDirection_id());
-					if (direction.getSt_dep()==st_dep.getStation_id()){
-						departurePoint=step.getStep();
-					}
-					if (direction.getSt_arr()==st_dep.getStation_id()){
-						departurePoint=step.getStep()+1;
-					}
-					
-					if (direction.getSt_dep()==st_arr.getStation_id()){
-						arrivalPoint = step.getStep();
-					}
-					if (direction.getSt_arr()==st_arr.getStation_id()){
-						arrivalPoint = step.getStep()+1;
-					}
-				}
-				if (departurePoint<arrivalPoint){
-					Date currentTime = new Date();
-					if ((j.getTime_dep().getTime()-currentTime.getTime())>10*60*1000)
-					appropriateJourneys.add(j);
-				}
+	Iterator<Journey> iterator = appropriateJourneys.iterator();
+	
+	while (iterator.hasNext()) {
+		Journey j = iterator.next();
+		List<Shedule> steps = new ArrayList<Shedule>();
+		steps.addAll(dao.getShedulesOfRoute(j.getRoute().getRouteId()));
+		double departurePoint = 0;
+		double arrivalPoint = 0;
+		for (Shedule step : steps){
+			Direction direction = (step.getDirection());
+			if (direction.getStDep().equals(stDep)){
+				departurePoint = step.getStep();
+			}
+			if (direction.getStArr().equals(stDep)){
+				departurePoint = step.getStep() + 1;
+			}
+			
+			if (direction.getStDep().equals(stArr)){
+				arrivalPoint = step.getStep();
+			}
+			if (direction.getStArr().equals(stArr)){
+				arrivalPoint = step.getStep() + 1;
 			}
 		}
-	
+		long tenMinutes = 10*60*1000;
+		if (departurePoint >= arrivalPoint || (j.getTimeDep().getTime()-(new Date()).getTime()) <= tenMinutes){
+			iterator.remove();
+		}
+	}
+		
 		if (!appropriateJourneys.isEmpty()){
 			
 			List<String> journeyStringData = new ArrayList<String>();
 			for (Journey j : appropriateJourneys){
-				String id = String.valueOf(j.getJourney_id());
-				Date departure = j.getTime_dep();
-				Date arrival = j.getTime_dep();
+				String id = String.valueOf(j.getJourneyId());
+				Date departure = j.getTimeDep();
+				Date arrival = j.getTimeDep();
 				
-				List<Shedule> steps = dao.getShedulesOfRoute(j.getRoute_id());
+				List<Shedule> steps = dao.getShedulesOfRoute(j.getRoute().getRouteId());
 				int depStep = 0;
 				int arrStep = 0;
 				double cost = 0;
 				for (Shedule step : steps){
-					Direction d = dao.getDirection(step.getDirection_id());
-					if (d.getSt_dep()==st_dep.getStation_id()){
+					Direction d = (step.getDirection());
+					if (d.getStDep().equals(stDep)){
 						depStep = step.getStep();
 					}
-					if (d.getSt_arr()==st_arr.getStation_id()){
+					if (d.getStArr().equals(stArr)){
 						arrStep = step.getStep();
 					}
 				}
 				for (Shedule step : steps){
-					Direction d = dao.getDirection(step.getDirection_id());
+					Direction d = (step.getDirection());
 					if (step.getStep()<depStep){
-						departure = new Date(departure.getTime()+d.getTime());
-						arrival = new Date(arrival.getTime()+d.getTime());
+						departure = new Date(departure.getTime() + d.getTime());
+						arrival = new Date(arrival.getTime() + d.getTime());
 					}
-					if (step.getStep()>=depStep&&step.getStep()<=arrStep){
-						arrival = new Date(arrival.getTime()+d.getTime());
-						cost+=d.getCost();
+					if (step.getStep() >= depStep && step.getStep() <= arrStep){
+						arrival = new Date(arrival.getTime() + d.getTime());
+						cost +=d.getCost();
 					}
 				}
 				if (!date.equals("")){
 					Date targetedDateBegin = sdf.parse(date);
+					Date targetedDateEnd = new Date(targetedDateBegin.getTime() + 24*60*60*1000);
 					
-					Date targetedDateEnd = new Date(targetedDateBegin.getTime()+24*60*60*1000);
-					
-					if (j.getTime_dep().getTime()>=targetedDateBegin.getTime()&&
-							j.getTime_dep().getTime()<=targetedDateEnd.getTime()){
+					if (departure.getTime() >= targetedDateBegin.getTime() &&
+							departure.getTime() <= targetedDateEnd.getTime()){
 						StringBuilder journeyData = new StringBuilder(id);
 						journeyData.append(";");
 						journeyData.append(sdf1.format(departure));
@@ -231,12 +213,12 @@ public  JourneysInfo getAppropriateJourneys(Station st_dep, Station st_arr, Stri
 						info.append(";");
 						info.append(arrStep);
 						info.append(";");
-						info.append(st_dep.getStation_id());
+						info.append(stDep.getStationId());
 						info.append(";");
-						info.append(st_arr.getStation_id());
+						info.append(stArr.getStationId());
 						helpInfo.add(info.toString());
 					}
-				}else{
+				} else {
 					StringBuilder journeyData = new StringBuilder(id);
 					journeyData.append(";");
 					journeyData.append(sdf1.format(departure));
@@ -252,25 +234,21 @@ public  JourneysInfo getAppropriateJourneys(Station st_dep, Station st_arr, Stri
 					info.append(";");
 					info.append(arrStep);
 					info.append(";");
-					info.append(st_dep.getStation_id());
+					info.append(stDep.getStationId());
 					info.append(";");
-					info.append(st_arr.getStation_id());
+					info.append(stArr.getStationId());
 					helpInfo.add(info.toString());
 				}
 			}
-			if (journeyStringData.size()!=0)
+			if (journeyStringData.size() != 0)
 			journeysInfo.setJourneyStringData(journeyStringData);
 			
-			if (helpInfo.size()!=0)
+			if (helpInfo.size() != 0)
 			journeysInfo.setJourneyHelpInfo(helpInfo);
 			return journeysInfo;
-		}else{
+		} else {
 			return journeysInfo;
-			
 		}
-	}else{
-		return journeysInfo;
-	}
 		
 }
 }

@@ -26,40 +26,38 @@ public class FinalRouteBuilderTest {
 Dao dao = Mockito.mock(Dao.class);
 @Before
 public void init(){
-builder = new FinalRouteBuilder(dao);
+builder = new FinalRouteBuilder();
+builder.setDao(dao);
 }
 	@Test
 	public void test() {
 		HoursMinutesCost data = new HoursMinutesCost("1","1","1000");
 		List<HoursMinutesCost> hdc = new ArrayList<HoursMinutesCost>();hdc.add(data);
-		Route new_r = new Route();new_r.setRoute_name("new");
-		Station s1 = new Station();s1.setStation_name("s1");s1.setStation_id(1);
-		Station s2 = new Station();s2.setStation_name("s2");s2.setStation_id(2);
-		Direction d = new Direction(3,s1.getStation_id(),s2.getStation_id(),(1*60+1)*60*1000, 1000);
+		Route new_r = new Route();new_r.setRouteName("new");
+		Station s1 = new Station();s1.setStationName("s1");s1.setStationId(1);
+		Station s2 = new Station();s2.setStationName("s2");s2.setStationId(2);
+		Direction d = new Direction(3, s1, s2, (1*60+1)*60*1000, 1000);
 	
 	Mockito.when(dao.getAllRoutes()).thenReturn(new ArrayList<Route>());
 	Mockito.when(dao.getStationByName("s1")).thenReturn(s1);
 	Mockito.when(dao.getStationByName("s2")).thenReturn(s2);
-	Mockito.when(dao.createDirection(s1.getStation_id(), s2.getStation_id(), d.getTime(), d.getCost())).thenReturn(d);
-	Mockito.when(dao.createRoute(new_r.getRoute_name())).thenReturn(new_r);
-	Mockito.when(dao.getDirectionByStartFinish(s1.getStation_id(), s2.getStation_id())).thenReturn(d);
-	Mockito.when(dao.createShedule(d.getDirection_id(), new_r.getRoute_id(),0)).thenReturn(new Shedule(3,d.getDirection_id(),new_r.getRoute_id(),0));
-	Mockito.when(dao.getAllDirections()).thenReturn(new ArrayList<Direction>());
-	Mockito.when(dao.getAllShedules()).thenReturn(new ArrayList<Shedule>());
-	Mockito.doNothing().when(dao).close();
-	
+	Mockito.when(dao.createDirection(s1, s2, d.getTime(), d.getCost())).thenReturn(d);
+	Mockito.when(dao.createRoute(new_r.getRouteName())).thenReturn(new_r);
+	Mockito.when(dao.getDirectionByStartFinish(s1.getStationId(), s2.getStationId())).thenReturn(d);
+	Mockito.when(dao.createShedule(d, new_r, 0)).thenReturn(new Shedule(3,d, new_r, 0));
+		
 	List<String> newRoute = new ArrayList<String>();
-	newRoute.add(s1.getStation_name());
-	newRoute.add(s2.getStation_name());
+	newRoute.add(s1.getStationName());
+	newRoute.add(s2.getStationName());
 	
 	List<String> newDirections = new ArrayList<String>();
-	newDirections.add(s1.getStation_name()+"/"+s2.getStation_name());
+	newDirections.add(s1.getStationName()+"/"+s2.getStationName());
 	RequiredDataForNewRoute reqData = new RequiredDataForNewRoute(newRoute, newDirections, hdc, "new");
 
 	
 	
 	List<String> routeInfo = new ArrayList<String>();
-	routeInfo.add(new_r.getRoute_name());
+	routeInfo.add(new_r.getRouteName());
 	routeInfo.add(String.valueOf(data.getHours()));
 	routeInfo.add(String.valueOf(data.getMinutes()));
 	routeInfo.add(String.valueOf(Double.parseDouble(data.getCost())));
@@ -102,12 +100,12 @@ builder = new FinalRouteBuilder(dao);
 	}
 	
 	@Test
-	public void test8(){
-		Route r =new Route();r.setRoute_name("old");
-		List<Route> oldRoutes = new ArrayList<Route>();oldRoutes.add(r);
-		Mockito.when(dao.getAllRoutes()).thenReturn(oldRoutes);
+	public void test8() {
+		Route r = new Route();
+		r.setRouteName("old");
+		Mockito.when(dao.getRouteByName(r.getRouteName())).thenReturn(r);
 		NewRouteSummary info=builder.build(new RequiredDataForNewRoute(new ArrayList<String>(), new ArrayList<String>(), new ArrayList<HoursMinutesCost>(), "old"));
-		Assert.assertTrue(info.getSummary()==null);
+		Assert.assertTrue(info.getSummary() == null);
 	}
 
 }

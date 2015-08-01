@@ -13,16 +13,23 @@ import javax.persistence.*;
 public class User implements Serializable {
 @Id	
 @GeneratedValue (strategy=GenerationType.AUTO)
-private int user_id;
-private String user_login;
-private String user_password;
-private boolean account_type;
+@Column(name = "user_id")
+private int userId;
+
+@Column(name = "user_login")
+private String userLogin;
+
+@Column(name = "user_password")
+private String userPassword;
+
+@Column(name = "account_type")
+private boolean accountType;
 
 @Override
 public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + user_id;
+	result = prime * result + userId;
 	return result;
 }
 
@@ -36,52 +43,60 @@ public boolean equals(Object obj) {
 	if (getClass() != obj.getClass())
 		return false;
 	User other = (User) obj;
-	if (user_id != other.user_id)
+	if (userId != other.userId)
 		return false;
 	return true;
 }
 
 
-public User(int user_id, String user_login, String user_password,
-		boolean account_type) {
+
+public User(int userId, String userLogin, String userPassword,
+		boolean accountType) {
 	super();
-	this.user_id = user_id;
-	this.user_login = user_login;
-	this.user_password = user_password;
-	this.account_type = account_type;
+	this.userId = userId;
+	this.userLogin = userLogin;
+	this.userPassword = userPassword;
+	this.accountType = accountType;
 }
 
 
-public int getUser_id() {
-	return user_id;
+public int getUserId() {
+	return userId;
 }
 
-public void setUser_id(int user_id) {
-	this.user_id = user_id;
+
+public void setUserId(int userId) {
+	this.userId = userId;
 }
 
-public String getUser_login() {
-	return user_login;
+
+public String getUserLogin() {
+	return userLogin;
 }
 
-public void setUser_login(String user_login) {
-	this.user_login = user_login;
+
+public void setUserLogin(String userLogin) {
+	this.userLogin = userLogin;
 }
 
-public String getUser_password() {
-	return user_password;
+
+public String getUserPassword() {
+	return userPassword;
 }
 
-public void setUser_password(String user_password) {
-	this.user_password = user_password;
+
+public void setUserPassword(String userPassword) {
+	this.userPassword = userPassword;
 }
 
-public boolean getAccount_type() {
-	return account_type;
+
+public boolean isAccountType() {
+	return accountType;
 }
 
-public void setAccount_type(boolean account_type) {
-	this.account_type = account_type;
+
+public void setAccountType(boolean accountType) {
+	this.accountType = accountType;
 }
 
 

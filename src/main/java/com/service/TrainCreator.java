@@ -9,8 +9,11 @@ import com.dto.NewTrainInfo;
 import com.entities.Dao;
 @Service("trainCreator")
 public class TrainCreator {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(TrainCreator.class);
 
 	@Transactional

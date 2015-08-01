@@ -23,8 +23,11 @@ import com.entities.Ticket;
 import com.entities.User;
 @Service("ticketsChecker")
 public class TicketsChecker {
+	private Dao dao;
 	@Autowired
-	private Dao dao;	
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(TicketsChecker.class);
 
 	@Transactional
@@ -34,7 +37,7 @@ public class TicketsChecker {
 		LOG.debug("=====================================================================");
 		String username = dto.getLogin();
 		User u = dao.getUserByName(username);
-		List<Ticket> tickets = dao.getTicketOfUser(u.getUser_id());
+		List<Ticket> tickets = dao.getTicketOfUser(u.getUserId());
 		List<String> ticketsData = getTicketData(tickets);
 		ListOfTickets list = new ListOfTickets(ticketsData);
 		LOG.debug("=====================================================================");
@@ -50,34 +53,34 @@ public class TicketsChecker {
 		}else{
 			List<String> ticketData = new ArrayList<String>();
 			for (Ticket ticket:tickets){
-				String passenger_name = dao.getPassenger(ticket.getPassenger_id()).getPassenger_name();
-				String passenger_surname = dao.getPassenger(ticket.getPassenger_id()).getPassenger_surname();
+				String passengerName = (ticket.getPassenger()).getPassengerName();
+				String passenger_surname = (ticket.getPassenger()).getPassengerSurname();
 
-				Station st_dep = dao.getStation(ticket.getSt_dep());
-				Station st_arr = dao.getStation(ticket.getSt_arr());
-				Journey journey = dao.getJourney(ticket.getJourney_id()); 
-				Date trainDeparture = journey.getTime_dep();
+				Station stDep = (ticket.getStDep());
+				Station stArr = (ticket.getStArr());
+				Journey journey = (ticket.getJourney()); 
+				Date trainDeparture = journey.getTimeDep();
 				Date passengerDep = trainDeparture;
 				Date passengerArr = trainDeparture;
-				Route route = dao.getRoute(journey.getRoute_id());
-				List<Shedule> steps = dao.getShedulesOfRoute(route.getRoute_id());
+				Route route = (journey.getRoute());
+				List<Shedule> steps = dao.getShedulesOfRoute(route.getRouteId());
 				int jour_begin=0;
 				int jour_end=0;
 				double cost=0;
 				for (Shedule s: steps){
-					Direction d = dao.getDirection(s.getDirection_id());
+					Direction d = (s.getDirection());
 					
-					Station s_dep= dao.getStation(d.getSt_dep());
-					Station s_arr= dao.getStation(d.getSt_arr());
-					if (s_dep.getStation_id()==st_dep.getStation_id()){
+					Station sDep= (d.getStDep());
+					Station sArr= (d.getStArr());
+					if (sDep.getStationId()==stDep.getStationId()){
 						jour_begin=s.getStep();
 					}
-					if (s_arr.getStation_id()==st_arr.getStation_id()){
+					if (sArr.getStationId()==stArr.getStationId()){
 						jour_end=s.getStep();
 					}
 				}
 				for(Shedule s : steps){
-					Direction d = dao.getDirection(s.getDirection_id());
+					Direction d = (s.getDirection());
 					if (s.getStep()<jour_begin){
 						passengerDep=new Date(passengerDep.getTime()+d.getTime());
 						passengerArr=new Date(passengerArr.getTime()+d.getTime());
@@ -89,15 +92,15 @@ public class TicketsChecker {
 				}
 				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.US);
 				StringBuilder sb = new StringBuilder();
-				sb.append(ticket.getTicket_id());
+				sb.append(ticket.getTicketId());
 				sb.append(",");
-				sb.append(passenger_name+" "+passenger_surname);
+				sb.append(passengerName+" "+passenger_surname);
 				sb.append(",");
-				sb.append(st_dep.getStation_name());
+				sb.append(stDep.getStationName());
 				sb.append(",");
 				sb.append(sdf.format(passengerDep));
 				sb.append(",");
-				sb.append(st_arr.getStation_name());
+				sb.append(stArr.getStationName());
 				sb.append(",");
 				sb.append(sdf.format(passengerArr));
 				sb.append(",");

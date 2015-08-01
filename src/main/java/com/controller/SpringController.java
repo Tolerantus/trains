@@ -479,7 +479,9 @@ public class SpringController {
 			try { 
 				dispatcher.service(new InitDBRequest());
 			} catch (Exception e) {
-				LOG.error(e);
+				LOG.error(e.getStackTrace());
+				
+				e.printStackTrace();
 				return "ErrorPage";
 			}
 		return "Menu";

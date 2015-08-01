@@ -10,8 +10,11 @@ import com.entities.Dao;
 import com.entities.Station;
 @Service("stationCreator")
 public class StationCreator {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(StationCreator.class);
 
 	@Transactional
@@ -22,10 +25,9 @@ public class StationCreator {
 		LOG.debug("=====================================================================");
 			String stationName = dto.getStation();
 			boolean isExist = false;
-			for (Station s : dao.getAllStations()) {
-				if (s.getStation_name().equals(stationName)) {
-					isExist = true;
-				}
+			Station s = dao.getStationByName(stationName);
+			if (s != null) {
+				isExist = true;
 			}
 			if (!isExist) {
 				dao.createStation(stationName);

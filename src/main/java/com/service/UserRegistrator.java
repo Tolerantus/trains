@@ -2,9 +2,9 @@ package com.service;
 
 
 
-import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +14,11 @@ import com.entities.Dao;
 import com.entities.User;
 @Service("userRegistrator")
 public class UserRegistrator {
-@Resource(name="dao")
-private Dao dao;
+	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 private static final Logger LOG = Logger.getLogger(UserRegistrator.class);
 
 	@Transactional

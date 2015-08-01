@@ -9,8 +9,11 @@ import com.dto.ResetRequest;
 import com.entities.Dao;
 @Service("resetter")
 public class Resetter {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(Resetter.class);
 
 	@Transactional

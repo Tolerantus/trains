@@ -14,8 +14,11 @@ import com.entities.Dao;
 import com.entities.Station;
 @Service("routeCreator")
 public class RouteCreator {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(RouteCreator.class);
 
 	@Transactional
@@ -25,10 +28,10 @@ public class RouteCreator {
 		LOG.debug(dto);
 		LOG.debug("=====================================================================");
 			RouteStationList routeStationList = new RouteStationList(null);
-			String typedDep = dto.getTyped_dep();
-			String typedArr = dto.getTyped_arr();
-			String selectDep = dto.getSelect_dep();
-			String selectArr = dto.getSelect_arr();
+			String typedDep = dto.getTypedDep();
+			String typedArr = dto.getTypedArr();
+			String selectDep = dto.getSelectDep();
+			String selectArr = dto.getSelectArr();
 			List<Station> allStations = dao.getAllStations();
 			if (allStations == null && typedDep.equals("") && typedArr.equals("")) {
 				return routeStationList;
@@ -38,18 +41,14 @@ public class RouteCreator {
 				boolean isStArrExist = false;
 
 				if (!typedDep.equals("")) {
-					for (Station station : allStations) {
-						if (station.getStation_name().equals(typedDep)) {
-							isStDepExist = true;
-						}
-					}
+					Station station = dao.getStationByName(typedDep);
+					if (station != null)
+						isStDepExist = true;
 				}
 				if (!typedArr.equals("")) {
-					for (Station station : allStations) {
-						if (station.getStation_name().equals(typedArr)) {
-							isStArrExist = true;
-						}
-					}
+					Station station = dao.getStationByName(typedArr);
+					if (station != null)
+						isStArrExist = true;
 				}
 
 				Station start = null;
@@ -75,8 +74,8 @@ public class RouteCreator {
 				}
 
 				List<String> route = new LinkedList<String>();
-				route.add(start.getStation_name());
-				route.add(finish.getStation_name());
+				route.add(start.getStationName());
+				route.add(finish.getStationName());
 				routeStationList.setRoute(route);
 				LOG.debug("=====================================================================");
 				LOG.debug(routeStationList);

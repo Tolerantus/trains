@@ -18,7 +18,8 @@ UserRegistrator registrator;
 Dao dao = Mockito.mock(Dao.class);
 @Before
 public void init(){
-registrator = new UserRegistrator(dao);
+registrator = new UserRegistrator();
+registrator.setDao(dao);
 }
 
 	@Test
@@ -26,7 +27,6 @@ registrator = new UserRegistrator(dao);
 		NewUserInfo info = new NewUserInfo("user", "password");
 		Mockito.when(dao.getUserByName("login")).thenReturn(null);
 		Mockito.when(dao.createUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean())).thenReturn(null);
-		Mockito.doNothing().when(dao).close();
 		UserExist exist = new UserExist(false,false);
 		Assert.assertEquals(exist.isExist(), registrator.register(info).isExist());
 		Assert.assertEquals(exist.isAdmin(), registrator.register(info).isAdmin());

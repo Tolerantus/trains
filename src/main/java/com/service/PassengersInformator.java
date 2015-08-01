@@ -16,8 +16,11 @@ import com.entities.Passenger;
 import com.entities.Ticket;
 @Service("passengerInformator")
 public class PassengersInformator {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(PassengersInformator.class);
 
 	@Transactional
@@ -30,21 +33,21 @@ public class PassengersInformator {
 			String[] tokens = journeyInfo.split(" ");
 			Journey j = dao.getJourney(Integer.parseInt(tokens[0]));
 			List<Passenger> passengers = new ArrayList<Passenger>();
-			for (Ticket t : dao.getAllTickets()) {
-				if (t.getJourney_id() == j.getJourney_id()) {
-					passengers.add(dao.getPassenger(t.getPassenger_id()));
-				}
+			
+			for (Ticket t : dao.getTicketsOfJourney(j)) {
+					passengers.add(t.getPassenger());
 			}
+			
 			List<String> passInfo = new ArrayList<String>();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			if (!passengers.isEmpty()) {
 				for (Passenger p : passengers) {
 					StringBuilder sb = new StringBuilder();
-					sb.append(p.getPassenger_name());
+					sb.append(p.getPassengerName());
 					sb.append(" ");
-					sb.append(p.getPassenger_surname());
+					sb.append(p.getPassengerSurname());
 					sb.append(" ");
-					sb.append(sdf.format(p.getPassenger_birthday()));
+					sb.append(sdf.format(p.getPassengerBirthday()));
 					passInfo.add(sb.toString());
 				}
 

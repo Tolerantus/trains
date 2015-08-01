@@ -25,22 +25,23 @@ SeatsChecker checker;
 Dao dao = Mockito.mock(Dao.class);
 @Before
 public void init(){
-	checker = new SeatsChecker(dao);
+	checker = new SeatsChecker();
+	checker.setDao(dao);
 }
 	@Test
 	public void testCheck() {
 		String journeyId = "1";
-		Journey j = new Journey();j.setJourney_id(1);
-		List<String> journeys = new ArrayList<String>();journeys.add(j.getJourney_id()+";"+"0;0");
+		Journey j = new Journey();j.setJourneyId(1);
+		List<String> journeys = new ArrayList<String>();journeys.add(j.getJourneyId()+";"+"0;0");
 		ChoosedJourney input = new ChoosedJourney(journeyId, journeys, null);
-		Seats seats = new Seats();seats.setJourney_id(j.getJourney_id());seats.setRoute_step(0);seats.setEmpty_seats(100);
+		Seats seats = new Seats();seats.setJourney(j);seats.setRouteStep(0);seats.setEmptySeats(100);
 		List<Seats> seatsOnJourney = new ArrayList<Seats>(); seatsOnJourney.add(seats);
 		
 		Mockito.when(dao.getJourney(Integer.parseInt(journeyId))).thenReturn(j);
-		Mockito.when(dao.getSeatsOnJourney(j.getJourney_id())).thenReturn(seatsOnJourney);
+		Mockito.when(dao.getSeatsOnJourney(j.getJourneyId())).thenReturn(seatsOnJourney);
 		
 		ChoosedJourney output = checker.check(input);
-		Assert.assertTrue(output.getEmptySeats()==seats.getEmpty_seats());
+		Assert.assertTrue(output.getEmptySeats() == seats.getEmptySeats());
 	}
 	@Test(expected=NullPointerException.class)
 	public void test2(){

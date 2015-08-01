@@ -1,6 +1,5 @@
 package services.test;
 
-import static org.junit.Assert.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,27 +29,28 @@ public class PassengerInformatorTest {
 	Dao dao = Mockito.mock(Dao.class);
 	@Before
 	public void init(){
-		informator = new PassengersInformator(dao);
+		informator = new PassengersInformator();
+		informator.setDao(dao);
 	}
 	@Test
 	public void testGetInfo() {
 		String journeyInfo = "";
 		
-		Journey j = new Journey();j.setJourney_id(1);journeyInfo+=String.valueOf(j.getJourney_id());
-		Date birthday = new Date();SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		Passenger p = new Passenger();p.setPassenger_id(2);p.setPassenger_name("name");p.setPassenger_surname("surname");p.setPassenger_birthday(birthday);
+		Journey j = new Journey(); j.setJourneyId(1); journeyInfo += String.valueOf(j.getJourneyId());
+		Date birthday = new Date(); SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		Passenger p = new Passenger(); p.setPassengerId(2); p.setPassengerName("name");
+		p.setPassengerSurname("surname"); p.setPassengerBirthday(birthday);
 		
-		Ticket t = new Ticket(); t.setPassenger_id(p.getPassenger_id());t.setJourney_id(j.getJourney_id());
-		List<Ticket> tickets = new ArrayList<Ticket>();tickets.add(t);
+		Ticket t = new Ticket(); t.setPassenger(p); t.setJourney(j);
+		List<Ticket> tickets = new ArrayList<Ticket>(); tickets.add(t);
 		
 		JourneyAndPassengers input = new JourneyAndPassengers(journeyInfo, null);
 		
-		Mockito.when(dao.getAllTickets()).thenReturn(tickets);
-		Mockito.when(dao.getPassenger(p.getPassenger_id())).thenReturn(p);
-		Mockito.when(dao.getJourney(j.getJourney_id())).thenReturn(j);
+		Mockito.when(dao.getTicketsOfJourney(j)).thenReturn(tickets);
+		Mockito.when(dao.getJourney(j.getJourneyId())).thenReturn(j);
 		
 		JourneyAndPassengers output = informator.getInfo(input);
-		String expectedResult = p.getPassenger_name()+ " " +  p.getPassenger_surname() + " " + sdf.format(birthday);
+		String expectedResult = p.getPassengerName()+ " " +  p.getPassengerSurname() + " " + sdf.format(birthday);
 		Assert.assertTrue(expectedResult.equals(output.getPassInfo().get(0)));
 		
 	}

@@ -12,22 +12,27 @@ import javax.persistence.*;
 public class Direction implements Serializable {
 @Id
 @GeneratedValue (strategy=GenerationType.AUTO)
-private int direction_id;
-public Direction(int direction_id, int st_dep, int st_arr, long time,
-		double cost) {
-	super();
-	this.direction_id = direction_id;
-	this.st_dep = st_dep;
-	this.st_arr = st_arr;
-	this.time = time;
-	this.cost = cost;
-}
+@Column(name = "direction_id")
+private int directionId;
+
+@ManyToOne(cascade = javax.persistence.CascadeType.ALL)
+@JoinColumn(name = "st_dep", referencedColumnName = "station_id")
+private Station stDep;
+
+@ManyToOne(cascade = javax.persistence.CascadeType.ALL)
+@JoinColumn(name = "st_arr", referencedColumnName = "station_id")
+private Station stArr;
+private long time;
+private double cost;
+
+
+
 
 @Override
 public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + direction_id;
+	result = prime * result + directionId;
 	return result;
 }
 
@@ -40,55 +45,69 @@ public boolean equals(Object obj) {
 	if (getClass() != obj.getClass())
 		return false;
 	Direction other = (Direction) obj;
-	if (direction_id != other.direction_id)
+	if (directionId != other.directionId)
 		return false;
 	return true;
 }
 
-private int st_dep;
-private int st_arr;
-private long time;
-private double cost;
-	
-public int getDirection_id() {
-	return direction_id;
-}
 
-public void setDirection_id(int direction_id) {
-	this.direction_id = direction_id;
-}
 
-public int getSt_dep() {
-	return st_dep;
-}
 
-public void setSt_dep(int st_dep) {
-	this.st_dep = st_dep;
-}
-
-public int getSt_arr() {
-	return st_arr;
-}
-
-public void setSt_arr(int st_arr) {
-	this.st_arr = st_arr;
-}
-
-public long getTime() {
-	return time;
-}
-
-public void setTime(long time) {
+	public Direction(int directionId, Station stDep, Station stArr, long time,
+		double cost) {
+	super();
+	this.directionId = directionId;
+	this.stDep = stDep;
+	this.stArr = stArr;
 	this.time = time;
-}
-
-public double getCost() {
-	return cost;
-}
-
-public void setCost(double cost) {
 	this.cost = cost;
 }
+
+
+
+
+	public int getDirectionId() {
+		return directionId;
+	}
+
+	public void setDirectionId(int directionId) {
+		this.directionId = directionId;
+	}
+
+	public Station getStDep() {
+		return stDep;
+	}
+
+	public void setStDep(Station stDep) {
+		this.stDep = stDep;
+	}
+
+	public Station getStArr() {
+		return stArr;
+	}
+
+	public void setStArr(Station stArr) {
+		this.stArr = stArr;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+
+
+
 
 	private static final long serialVersionUID = 1L;
 
@@ -98,7 +117,7 @@ public Direction() {
 
 @Override
 public String toString() {
-	return st_dep + " - " + st_arr;
+	return stDep + " - " + stArr;
 }
    
 }

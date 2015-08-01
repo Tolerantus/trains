@@ -4,25 +4,43 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 /**
  * Entity implementation class for Entity: Shedule
  *
  */
 @Entity
-
 public class Shedule implements Serializable {
+	
 @Id
 @GeneratedValue (strategy=GenerationType.AUTO)
-private int shedule_id;
-private int direction_id;
-private int route_id;
+@Column(name = "shedule_id")
+private int sheduleId;
+
+@ManyToOne
+@JoinColumn(name = "direction_id", referencedColumnName = "direction_id")
+@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+private Direction direction;
+
+@ManyToOne
+@JoinColumn(name = "route_id", referencedColumnName = "route_id")
+@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+private Route route;
+
+@Column(name = "step")
 private int step;
 	
-	public Shedule(int shedule_id, int direction_id, int route_id, int step) {
+
+
+
+
+	public Shedule(int sheduleId, Direction direction, Route route, int step) {
 	super();
-	this.shedule_id = shedule_id;
-	this.direction_id = direction_id;
-	this.route_id = route_id;
+	this.sheduleId = sheduleId;
+	this.direction = direction;
+	this.route = route;
 	this.step = step;
 }
 
@@ -30,7 +48,7 @@ private int step;
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + shedule_id;
+		result = prime * result + sheduleId;
 		return result;
 	}
 
@@ -43,42 +61,52 @@ private int step;
 		if (getClass() != obj.getClass())
 			return false;
 		Shedule other = (Shedule) obj;
-		if (shedule_id != other.shedule_id)
+		if (sheduleId != other.sheduleId)
 			return false;
 		return true;
 	}
 
-	public int getShedule_id() {
-	return shedule_id;
-}
 
-public void setShedule_id(int shedule_id) {
-	this.shedule_id = shedule_id;
-}
 
-public int getDirection_id() {
-	return direction_id;
-}
+	
 
-public void setDirection_id(int direction_id) {
-	this.direction_id = direction_id;
-}
 
-public int getRoute_id() {
-	return route_id;
-}
+	public int getSheduleId() {
+		return sheduleId;
+	}
 
-public void setRoute_id(int route_id) {
-	this.route_id = route_id;
-}
+	public void setSheduleId(int sheduleId) {
+		this.sheduleId = sheduleId;
+	}
 
-public int getStep() {
-	return step;
-}
+	public Direction getDirection() {
+		return direction;
+	}
 
-public void setStep(int step) {
-	this.step = step;
-}
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
+
+	public Route getRoute() {
+		return route;
+	}
+
+	public void setRoute(Route route) {
+		this.route = route;
+	}
+
+	public int getStep() {
+		return step;
+	}
+
+	public void setStep(int step) {
+		this.step = step;
+	}
+
+
+
+
+
 
 	private static final long serialVersionUID = 1L;
 

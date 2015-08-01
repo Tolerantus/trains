@@ -12,8 +12,12 @@ import com.entities.Dao;
 import com.entities.User;
 @Service("checkUser")
 public class CheckUser {
-	@Autowired
+	
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 
 	@Transactional
 	public UserExist check(UserInfo dto){
@@ -21,9 +25,9 @@ public class CheckUser {
 			boolean isExist = false;
 			boolean isAdmin = false;
 			User user = dao.getUserByName(login);
-			if (user!=null){
+			if (user != null && user.getUserPassword().equals(dto.getPassword())){
 				isExist = true;
-				isAdmin = user.getAccount_type();
+				isAdmin = user.isAccountType();
 			}
 			return new UserExist(isExist, isAdmin);
 	}

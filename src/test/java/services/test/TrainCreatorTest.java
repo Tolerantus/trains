@@ -17,15 +17,14 @@ public class TrainCreatorTest {
 	private Dao dao = Mockito.mock(Dao.class);
 	@Before
 	public void createChecker(){
-		creator = new TrainCreator(dao);
+		creator = new TrainCreator();
+		creator.setDao(dao);
 	}
 	
 	@Test
 	public void createTest() {
 		NewTrainInfo info = new NewTrainInfo("100");
-		Mockito.doNothing().when(dao).close();
 		creator.create(info);
-		
 	}
 
 }

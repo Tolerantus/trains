@@ -25,45 +25,25 @@ import com.dto.UserInfo;
 import com.dto.UserLoginContainer;
 @Service("dispatcher")
 public class Dispatcher {
-	@Autowired
 	private CheckUser checkUser; 
-	@Autowired
 	private UserRegistrator userRegistrator;
-	@Autowired
 	private StationReturner stationReturner;
-	@Autowired
 	private GetAppropriateJourneys getAppropriateJourneys;
-	@Autowired
 	private SeatsChecker seatsChecker;
-	@Autowired
 	private PassengerRegistrator passengerRegistrator;
-	@Autowired
 	private TicketsChecker ticketsChecker;
-	@Autowired
 	private RouteCreator routeCreator;
-	@Autowired
 	private RouteStationInjector routeStationInjector;
-	@Autowired
 	private RouteDirectionsChecker routeDirectionsChecker;
-	@Autowired
 	private FinalRouteBuilder finalRouteBuilder;
-	@Autowired
 	private TrainCreator trainCreator;
-	@Autowired
 	private RoutesInformator routesInformator;
-	@Autowired
 	private JourneyPlanner journeyPlanner;
-	@Autowired
 	private StationCreator stationCreator;
-	@Autowired
 	private JourneyBriefer journeyBriefer;
-	@Autowired
 	private PassengersInformator passengersInformator;
-	@Autowired
 	private Resetter resetter;
-	@Autowired
 	private DBInitializer dbInitializer;
-	@Autowired
 	private TicketService ticketService;
 	
 	public  Object service(Object dto) throws Exception{
@@ -129,4 +109,87 @@ public class Dispatcher {
 		}
 	return null;
 	}
+	@Autowired
+	public void setCheckUser(CheckUser checkUser) {
+		this.checkUser = checkUser;
+	}
+	@Autowired
+	public void setUserRegistrator(UserRegistrator userRegistrator) {
+		this.userRegistrator = userRegistrator;
+	}
+	@Autowired
+	public void setStationReturner(StationReturner stationReturner) {
+		this.stationReturner = stationReturner;
+	}
+	@Autowired
+	public void setGetAppropriateJourneys(
+			GetAppropriateJourneys getAppropriateJourneys) {
+		this.getAppropriateJourneys = getAppropriateJourneys;
+	}
+	@Autowired
+	public void setSeatsChecker(SeatsChecker seatsChecker) {
+		this.seatsChecker = seatsChecker;
+	}
+	@Autowired
+	public void setPassengerRegistrator(PassengerRegistrator passengerRegistrator) {
+		this.passengerRegistrator = passengerRegistrator;
+	}
+	@Autowired
+	public void setTicketsChecker(TicketsChecker ticketsChecker) {
+		this.ticketsChecker = ticketsChecker;
+	}
+	@Autowired
+	public void setRouteCreator(RouteCreator routeCreator) {
+		this.routeCreator = routeCreator;
+	}
+	@Autowired
+	public void setRouteStationInjector(RouteStationInjector routeStationInjector) {
+		this.routeStationInjector = routeStationInjector;
+	}
+	@Autowired
+	public void setRouteDirectionsChecker(
+			RouteDirectionsChecker routeDirectionsChecker) {
+		this.routeDirectionsChecker = routeDirectionsChecker;
+	}
+	@Autowired
+	public void setFinalRouteBuilder(FinalRouteBuilder finalRouteBuilder) {
+		this.finalRouteBuilder = finalRouteBuilder;
+	}
+	@Autowired
+	public void setTrainCreator(TrainCreator trainCreator) {
+		this.trainCreator = trainCreator;
+	}
+	@Autowired
+	public void setRoutesInformator(RoutesInformator routesInformator) {
+		this.routesInformator = routesInformator;
+	}
+	@Autowired
+	public void setJourneyPlanner(JourneyPlanner journeyPlanner) {
+		this.journeyPlanner = journeyPlanner;
+	}
+	@Autowired
+	public void setStationCreator(StationCreator stationCreator) {
+		this.stationCreator = stationCreator;
+	}
+	@Autowired
+	public void setJourneyBriefer(JourneyBriefer journeyBriefer) {
+		this.journeyBriefer = journeyBriefer;
+	}
+	@Autowired
+	public void setPassengersInformator(PassengersInformator passengersInformator) {
+		this.passengersInformator = passengersInformator;
+	}
+	@Autowired
+	public void setResetter(Resetter resetter) {
+		this.resetter = resetter;
+	}
+	@Autowired
+	public void setDbInitializer(DBInitializer dbInitializer) {
+		this.dbInitializer = dbInitializer;
+	}
+	@Autowired
+	public void setTicketService(TicketService ticketService) {
+		this.ticketService = ticketService;
+	}
+	
 }

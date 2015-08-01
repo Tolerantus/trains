@@ -2,13 +2,11 @@ package com.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dto.TicketContainer;
 import com.dto.TicketListConstraints;
@@ -17,8 +15,11 @@ import com.entities.Ticket;
 
 @Service
 public class TicketService {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	
 	@Transactional
 	public List<Ticket> dispatch(TicketContainer container) {
@@ -39,9 +40,7 @@ public class TicketService {
 	
 	public List<Ticket> getTicketsBetween(String startDate, String stopDate) {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		startDate = "01/01/2015";
-		stopDate = sdf.format(new Date());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		List<Ticket> tickets = null;
 		try {
 			tickets = dao.getTicketsBetweenDates(sdf.parse(startDate), sdf.parse(stopDate));
@@ -51,9 +50,8 @@ public class TicketService {
 		return tickets;
 	}
 	
-	public List<Ticket> getTicketsBefore(@RequestParam("stopDate") String stopDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		stopDate = sdf.format(new Date());
+	public List<Ticket> getTicketsBefore(String stopDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		List<Ticket> tickets = null;
 		try {
 			tickets = dao.getTicketsBefore(sdf.parse(stopDate));
@@ -63,9 +61,8 @@ public class TicketService {
 		return tickets;
 	}
 
-	public List<Ticket> getTicketsAfter(@RequestParam("startDate") String startDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		startDate = "01/01/2015";
+	public List<Ticket> getTicketsAfter(String startDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		List<Ticket> tickets = null;
 		try {
 			tickets = dao.getTicketsAfter(sdf.parse(startDate));
