@@ -13,18 +13,35 @@ import javax.persistence.*;
 public class Route implements Serializable {
 @Id
 @GeneratedValue (strategy=GenerationType.AUTO)
-private int route_id;
-private String route_name;
+@Column(name = "route_id")
+private int routeId;
+
+@Column(name = "route_name")
+private String routeName;
 	
-	public int getRoute_id() {
-	return route_id;
+
+
+public int getRouteId() {
+	return routeId;
+}
+
+public void setRouteId(int routeId) {
+	this.routeId = routeId;
+}
+
+public String getRouteName() {
+	return routeName;
+}
+
+public void setRouteName(String routeName) {
+	this.routeName = routeName;
 }
 
 @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + route_id;
+		result = prime * result + routeId;
 		return result;
 	}
 
@@ -37,28 +54,22 @@ private String route_name;
 		if (getClass() != obj.getClass())
 			return false;
 		Route other = (Route) obj;
-		if (route_id != other.route_id)
+		if (routeId != other.routeId)
 			return false;
 		return true;
 	}
 
-public Route(int route_id, String route_name) {
+
+
+
+	public Route(int routeId, String routeName) {
 		super();
-		this.route_id = route_id;
-		this.route_name = route_name;
+		this.routeId = routeId;
+		this.routeName = routeName;
 	}
 
-public void setRoute_id(int route_id) {
-	this.route_id = route_id;
-}
 
-public String getRoute_name() {
-	return route_name;
-}
 
-public void setRoute_name(String route_name) {
-	this.route_name = route_name;
-}
 
 	private static final long serialVersionUID = 1L;
 

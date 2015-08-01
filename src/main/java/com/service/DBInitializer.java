@@ -11,8 +11,11 @@ import com.dto.InitDBRequest;
 import com.entities.Dao;
 @Service("DBInitializer")
 public class DBInitializer {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(DBInitializer.class);
 
 	@Transactional

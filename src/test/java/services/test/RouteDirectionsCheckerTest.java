@@ -27,31 +27,32 @@ public class RouteDirectionsCheckerTest {
 	Dao dao = Mockito.mock(Dao.class);
 	@Before
 	public void init(){
-		checker = new RouteDirectionsChecker(dao);
+		checker = new RouteDirectionsChecker();
+		checker.setDao(dao);
 	}
 	@Test
 	public void testCheck() {
 		String st_dep = "station1";
-		Station st1 = new Station();st1.setStation_id(1);st1.setStation_name(st_dep);
+		Station st1 = new Station();st1.setStationId(1);st1.setStationName(st_dep);
 		String st_arr = "station2";
-		Station st2 = new Station();st2.setStation_id(2);st2.setStation_name(st_arr);
+		Station st2 = new Station();st2.setStationId(2);st2.setStationName(st_arr);
 		List<String> route = new ArrayList<String>();route.add(st_dep);route.add(st_arr);
 		RouteStationList input = new RouteStationList(route);
-		Direction d = new Direction();d.setSt_dep(st1.getStation_id());d.setSt_arr(st2.getStation_id());
+		Direction d = new Direction();d.setStDep(st1);d.setStArr(st2);
 		List<Direction> oldDirections = new ArrayList<Direction>();oldDirections.add(d);
 		
 		Mockito.when(dao.getStationByName(st_dep)).thenReturn(st1);
 		Mockito.when(dao.getStationByName(st_arr)).thenReturn(st2);
-		Mockito.when(dao.getStation(st1.getStation_id())).thenReturn(st1);
-		Mockito.when(dao.getStation(st2.getStation_id())).thenReturn(st2);
+		
 		
 		DirectionData output = checker.check(input);
 		String direction = st_dep+"/"+st_arr;
 		List<String> directions = new ArrayList<String>();directions.add(direction);
 		DirectionData expectedOutput = new DirectionData(directions);
-		Assert.assertTrue(output.getDirections().equals(expectedOutput.getDirections()));
+		Assert.assertTrue(output.getDirections().containsAll(expectedOutput.getDirections()));
+		Assert.assertTrue(output.getDirections().size() == (expectedOutput.getDirections()).size());
 		
-		Mockito.when(dao.getAllDirections()).thenReturn(oldDirections);
+		Mockito.when(dao.getDirectionByStartFinish(st1.getStationId(), st2.getStationId())).thenReturn(d);
 		output = checker.check(input);
 		
 		Assert.assertTrue(output.getDirections().size()==0);

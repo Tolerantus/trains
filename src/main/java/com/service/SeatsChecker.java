@@ -13,8 +13,11 @@ import com.entities.Journey;
 import com.entities.Seats;
 @Service("seatsChecker")
 public class SeatsChecker {
-@Autowired
-private Dao dao;
+	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 private static final Logger LOG = Logger.getLogger(SeatsChecker.class);
 
 	@Transactional
@@ -35,13 +38,13 @@ private static final Logger LOG = Logger.getLogger(SeatsChecker.class);
 			String[] tokens = journeyData.split(";");
 			int depStep = Integer.parseInt(tokens[1]);
 			int arrStep = Integer.parseInt(tokens[2]);
-			List<Seats> seats = dao.getSeatsOnJourney(j.getJourney_id());
+			List<Seats> seats = dao.getSeatsOnJourney(j.getJourneyId());
 			if (!seats.isEmpty()) {
 				int emptySeats = 200;
 				for (Seats s : seats) {
-					if (s.getRoute_step() >= depStep
-							&& s.getRoute_step() <= arrStep) {
-						emptySeats = Math.min(emptySeats, s.getEmpty_seats());
+					if (s.getRouteStep() >= depStep
+							&& s.getRouteStep() <= arrStep) {
+						emptySeats = Math.min(emptySeats, s.getEmptySeats());
 					}
 				}
 				dto.setJourneyId(journeyData);

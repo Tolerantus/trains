@@ -12,8 +12,11 @@ import com.entities.Dao;
 import com.entities.Station;
 @Service("stationReturner")
 public class StationReturner {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(StationReturner.class);
 
 	@Transactional

@@ -2,15 +2,15 @@ package com.dto;
 
 public class StationsForSheduling {
 private String singleStation;
-private String st_dep;
-private String st_arr;
+private String stDep;
+private String stArr;
 private String date;
-public StationsForSheduling(String singleStation, String st_dep, String st_arr,
+public StationsForSheduling(String singleStation, String stDep, String stArr,
 		String date) {
 	super();
 	this.singleStation = singleStation;
-	this.st_dep = st_dep;
-	this.st_arr = st_arr;
+	this.stDep = stDep;
+	this.stArr = stArr;
 	this.date = date;
 }
 public String getSingleStation() {
@@ -19,17 +19,17 @@ public String getSingleStation() {
 public void setSingleStation(String singleStation) {
 	this.singleStation = singleStation;
 }
-public String getSt_dep() {
-	return st_dep;
+public String getStDep() {
+	return stDep;
 }
-public void setSt_dep(String st_dep) {
-	this.st_dep = st_dep;
+public void setStDep(String stDep) {
+	this.stDep = stDep;
 }
-public String getSt_arr() {
-	return st_arr;
+public String getStArr() {
+	return stArr;
 }
-public void setSt_arr(String st_arr) {
-	this.st_arr = st_arr;
+public void setStArr(String stArr) {
+	this.stArr = stArr;
 }
 public String getDate() {
 	return date;
@@ -37,11 +37,8 @@ public String getDate() {
 public void setDate(String date) {
 	this.date = date;
 }
-@Override
-public String toString() {
-	return "StationsForSheduling [singleStation=" + singleStation + ", st_dep="
-			+ st_dep + ", st_arr=" + st_arr + ", date=" + date + "]";
-}
+
+
 
 
 }

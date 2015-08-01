@@ -19,8 +19,11 @@ import com.entities.Ticket;
 import com.entities.User;
 @Service("passengerRegistrator")
 public class PassengerRegistrator {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(PassengerRegistrator.class);
 
 /*input data like:
@@ -69,24 +72,21 @@ public class PassengerRegistrator {
 					.parseInt(passengerDepAndDestStations_tokens[3]));
 			Station st_arr = dao.getStation(Integer
 					.parseInt(passengerDepAndDestStations_tokens[4]));
-			List<Ticket> allTickets = dao.getAllTickets();
-			for (Ticket t : allTickets) {
-				Passenger oldPassenger = dao.getPassenger(t.getPassenger_id());
-				if (t.getJourney_id() == journeyId
-						&& oldPassenger.equals(newPassenger)) {
-					dao.deletePassenger(newPassenger.getPassenger_id());
+			List<Ticket> ticketsOfThisPassenger = dao.getTicketsOfPassenger(newPassenger);
+			for (Ticket t : ticketsOfThisPassenger) {
+				if (t.getJourney().getJourneyId() == journeyId) {
+					dao.deletePassenger(newPassenger.getPassengerId());
 					info.setExist(true);
 				}
 			}
 			if (!info.isExist()) {
 				Ticket newTicket = dao.createTicket(
-						newPassenger.getPassenger_id(), journeyId,
-						st_dep.getStation_id(), st_arr.getStation_id(), new Date());
+						newPassenger, dao.getJourney(journeyId),
+						st_dep, st_arr, dao.getDate());
 				User currentUser = dao.getUserByName(user);
-				dao.createUser_Ticket(newTicket.getTicket_id(),
-						currentUser.getUser_id());
-				dao.decrementEmptySeats(journeyId, st_dep.getStation_id(),
-						st_arr.getStation_id());
+				dao.createUserAndTicket(newTicket, currentUser);
+				dao.decrementEmptySeats(journeyId, st_dep.getStationId(),
+						st_arr.getStationId());
 				List<String> allJourneysData = dto.getAllJourneysData();
 				String passengerDepAndDestTime = "";
 				for (String s : allJourneysData) {
@@ -101,17 +101,17 @@ public class PassengerRegistrator {
 				String cost = passengerDepAndDestTime_tokens[3];
 
 				StringBuilder ticketInfo = new StringBuilder(
-						String.valueOf(newTicket.getTicket_id()));
+						String.valueOf(newTicket.getTicketId()));
 				ticketInfo.append(";");
-				ticketInfo.append(newPassenger.getPassenger_name());
+				ticketInfo.append(newPassenger.getPassengerName());
 				ticketInfo.append(";");
-				ticketInfo.append(newPassenger.getPassenger_surname());
+				ticketInfo.append(newPassenger.getPassengerSurname());
 				ticketInfo.append(";");
-				ticketInfo.append(st_dep.getStation_name());
+				ticketInfo.append(st_dep.getStationName());
 				ticketInfo.append(";");
 				ticketInfo.append(passengerDepTime);
 				ticketInfo.append(";");
-				ticketInfo.append(st_arr.getStation_name());
+				ticketInfo.append(st_arr.getStationName());
 				ticketInfo.append(";");
 				ticketInfo.append(passengerDestTime);
 				ticketInfo.append(";");

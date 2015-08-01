@@ -29,7 +29,8 @@ JourneyPlanner planner;
 Dao dao = Mockito.mock(Dao.class);
 @Before
 public void init(){
-	planner = new JourneyPlanner(dao);
+	planner = new JourneyPlanner();
+	planner.setDao(dao);
 }
 	@Test
 	public void test() throws ParseException {
@@ -38,23 +39,22 @@ public void init(){
 		String routeInfo = "1";
 		String date = "2015-12-01";
 		String time = "00:00";
-		Route r = new Route();r.setRoute_id(1);r.setRoute_name("route");
-		Direction d = new Direction();d.setDirection_id(2);
-		Shedule s = new Shedule();s.setDirection_id(d.getDirection_id());s.setStep(0);
+		Route r = new Route();r.setRouteId(1);r.setRouteName("route");
+		Direction d = new Direction();d.setDirectionId(2);
+		Shedule s = new Shedule();s.setDirection(d);s.setStep(0);
 		List<Shedule> steps = new ArrayList<Shedule>();steps.add(s);
-		Train train = new Train();train.setTrain_id(3);
+		Train train = new Train();train.setTrainId(3);
 		List<Train> trains = new ArrayList<Train>();trains.add(train);
-		Journey j = new Journey(4,train.getTrain_id(), r.getRoute_id(), sdf.parse(date));
+		Journey j = new Journey(4, r, train, sdf.parse(date));
 		
 		Mockito.when(dao.getRoute(Integer.parseInt(routeInfo))).thenReturn(r);
-		Mockito.when(dao.getShedulesOfRoute(r.getRoute_id())).thenReturn(steps);
-		Mockito.when(dao.getDirection(d.getDirection_id())).thenReturn(d);
+		Mockito.when(dao.getShedulesOfRoute(r.getRouteId())).thenReturn(steps);
 		Mockito.when(dao.getAllTrains()).thenReturn(trains);
-		Mockito.when(dao.getAllJourneysOfTrain(train.getTrain_id())).thenReturn(new ArrayList<Journey>());
-		Mockito.when(dao.createJourney(train.getTrain_id(), r.getRoute_id(), sdf.parse(date))).thenReturn(j);
+		Mockito.when(dao.getAllJourneysOfTrain(train.getTrainId())).thenReturn(new ArrayList<Journey>());
+		Mockito.when(dao.createJourney(train, r, sdf.parse(date))).thenReturn(j);
 		
 		NewJourneyInfo info1 = new NewJourneyInfo(routeInfo, date, time, null, null, null, false);
-		NewJourneyInfo info2 = new NewJourneyInfo(routeInfo, date, time, String.valueOf(j.getJourney_id()), r.getRoute_name(), String.valueOf(train.getTrain_id()), false);
+		NewJourneyInfo info2 = new NewJourneyInfo(routeInfo, date, time, String.valueOf(j.getJourneyId()), r.getRouteName(), String.valueOf(train.getTrainId()), false);
 		NewJourneyInfo info3 = planner.plan(info1);
 		
 		Assert.assertTrue(info3.getJourneyId().equals(info2.getJourneyId()));
@@ -72,23 +72,22 @@ public void init(){
 		String routeInfo = "1";
 		String date = "2015-01-01";
 		String time = "00:00";
-		Route r = new Route();r.setRoute_id(1);r.setRoute_name("route");
-		Direction d = new Direction();d.setDirection_id(2);
-		Shedule s = new Shedule();s.setDirection_id(d.getDirection_id());s.setStep(0);
+		Route r = new Route();r.setRouteId(1);r.setRouteName("route");
+		Direction d = new Direction();d.setDirectionId(2);
+		Shedule s = new Shedule();s.setDirection(d);s.setStep(0);
 		List<Shedule> steps = new ArrayList<Shedule>();steps.add(s);
-		Train train = new Train();train.setTrain_id(3);
+		Train train = new Train();train.setTrainId(3);
 		List<Train> trains = new ArrayList<Train>();trains.add(train);
-		Journey j = new Journey(4,train.getTrain_id(), r.getRoute_id(), sdf.parse(date));
+		Journey j = new Journey(4, r, train, sdf.parse(date));
 		
 		Mockito.when(dao.getRoute(Integer.parseInt(routeInfo))).thenReturn(r);
-		Mockito.when(dao.getShedulesOfRoute(r.getRoute_id())).thenReturn(steps);
-		Mockito.when(dao.getDirection(d.getDirection_id())).thenReturn(d);
+		Mockito.when(dao.getShedulesOfRoute(r.getRouteId())).thenReturn(steps);
 		Mockito.when(dao.getAllTrains()).thenReturn(trains);
-		Mockito.when(dao.getAllJourneysOfTrain(train.getTrain_id())).thenReturn(new ArrayList<Journey>());
-		Mockito.when(dao.createJourney(train.getTrain_id(), r.getRoute_id(), sdf.parse(date))).thenReturn(j);
+		Mockito.when(dao.getAllJourneysOfTrain(train.getTrainId())).thenReturn(new ArrayList<Journey>());
+		Mockito.when(dao.createJourney(train, r, sdf.parse(date))).thenReturn(j);
 		
 		NewJourneyInfo info1 = new NewJourneyInfo(routeInfo, date, time, null, null, null, false);
-		NewJourneyInfo info2 = new NewJourneyInfo(routeInfo, date, time, String.valueOf(j.getJourney_id()), r.getRoute_name(), String.valueOf(train.getTrain_id()), false);
+		NewJourneyInfo info2 = new NewJourneyInfo(routeInfo, date, time, String.valueOf(j.getJourneyId()), r.getRouteName(), String.valueOf(train.getTrainId()), false);
 		NewJourneyInfo info3 = planner.plan(info1);
 		
 		Assert.assertTrue(info3.getJourneyId()==null);
@@ -125,16 +124,15 @@ public void init(){
 		String routeInfo = "1";
 		String date = "2015-12-01";
 		String time = "00:00";
-		Route r = new Route();r.setRoute_id(1);r.setRoute_name("route");
-		Direction d = new Direction();d.setDirection_id(2);
-		Shedule s = new Shedule();s.setDirection_id(d.getDirection_id());s.setStep(0);
+		Route r = new Route();r.setRouteId(1);r.setRouteName("route");
+		Direction d = new Direction();d.setDirectionId(2);
+		Shedule s = new Shedule();s.setDirection(d);s.setStep(0);
 		List<Shedule> steps = new ArrayList<Shedule>();steps.add(s);
 		
 		List<Train> trains = new ArrayList<Train>();
 		
 		Mockito.when(dao.getRoute(Integer.parseInt(routeInfo))).thenReturn(r);
-		Mockito.when(dao.getShedulesOfRoute(r.getRoute_id())).thenReturn(steps);
-		Mockito.when(dao.getDirection(d.getDirection_id())).thenReturn(d);
+		Mockito.when(dao.getShedulesOfRoute(r.getRouteId())).thenReturn(steps);
 		Mockito.when(dao.getAllTrains()).thenReturn(trains);
 		
 		

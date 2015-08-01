@@ -24,44 +24,46 @@ public class RouteCreatorTest {
 	Dao dao = Mockito.mock(Dao.class);
 	@Before
 	public void init(){
-		creator = new RouteCreator(dao);
+		creator = new RouteCreator();
+		creator.setDao(dao);
 	}
 	@Test
 	public void test() {
-		String typed_dep = "station1";
-		Station st1 = new Station();st1.setStation_id(1);st1.setStation_name(typed_dep);
-		String typed_arr = "station2";
-		Station st2 = new Station();st2.setStation_id(2);st2.setStation_name(typed_arr);
-		List<String> newStations = new ArrayList<String>();newStations.add(typed_dep);newStations.add(typed_arr);
-		String select_dep = "select1";
-		Station st3 = new Station();st3.setStation_id(3);st3.setStation_name(select_dep);
-		String select_arr = "select2";
-		Station st4 = new Station(); st4.setStation_id(4);st4.setStation_name(select_arr);
+		String typedDep = "station1";
+		Station st1 = new Station();st1.setStationId(1);st1.setStationName(typedDep);
+		String typedArr = "station2";
+		Station st2 = new Station();st2.setStationId(2);st2.setStationName(typedArr);
+		List<String> newStations = new ArrayList<String>();newStations.add(typedDep);newStations.add(typedArr);
+		String selectDep = "select1";
+		Station st3 = new Station();st3.setStationId(3);st3.setStationName(selectDep);
+		String selectArr = "select2";
+		Station st4 = new Station(); st4.setStationId(4);st4.setStationName(selectArr);
 		List<Station> oldStations = new ArrayList<Station>();oldStations.add(st3);oldStations.add(st4);
-		List<String> oldStationNamings = new ArrayList<String>();oldStationNamings.add(st3.getStation_name());oldStationNamings.add(st4.getStation_name());
-		NewRouteStartAndFinish input = new NewRouteStartAndFinish(typed_dep, typed_arr, select_dep, select_arr);
+		List<String> oldStationNamings = new ArrayList<String>();oldStationNamings.add(st3.getStationName());
+		oldStationNamings.add(st4.getStationName());
+		NewRouteStartAndFinish input = new NewRouteStartAndFinish(typedDep, typedArr, selectDep, selectArr);
 		
 		
-		Mockito.when(dao.createStation(typed_dep)).thenReturn(st1);
-		Mockito.when(dao.createStation(typed_arr)).thenReturn(st2);
-		Mockito.when(dao.getStationByName(typed_dep)).thenReturn(st1);
-		Mockito.when(dao.getStationByName(typed_arr)).thenReturn(st2);
-		Mockito.when(dao.getStationByName(select_dep)).thenReturn(st3);
-		Mockito.when(dao.getStationByName(select_arr)).thenReturn(st4);
+		Mockito.when(dao.createStation(typedDep)).thenReturn(st1);
+		Mockito.when(dao.createStation(typedArr)).thenReturn(st2);
+		Mockito.when(dao.getStationByName(typedDep)).thenReturn(st1);
+		Mockito.when(dao.getStationByName(typedArr)).thenReturn(st2);
+		Mockito.when(dao.getStationByName(selectDep)).thenReturn(st3);
+		Mockito.when(dao.getStationByName(selectArr)).thenReturn(st4);
 		
 		RouteStationList output = creator.append(input);
 		Assert.assertTrue(newStations.equals(output.getRoute()));
 		
 		Mockito.when(dao.getAllStations()).thenReturn(oldStations);
 		
-		NewRouteStartAndFinish input2 = new NewRouteStartAndFinish("", "", select_dep, select_arr);
+		NewRouteStartAndFinish input2 = new NewRouteStartAndFinish("", "", selectDep, selectArr);
 		
 		RouteStationList output2 = creator.append(input2);
 		Assert.assertTrue(oldStationNamings.equals(output2.getRoute()));
 		
-		NewRouteStartAndFinish input3 = new NewRouteStartAndFinish(typed_dep, "", select_dep, select_arr);
+		NewRouteStartAndFinish input3 = new NewRouteStartAndFinish(typedDep, "", selectDep, selectArr);
 		RouteStationList output3 = creator.append(input3);
-		List<String> stNames = new ArrayList<String>(); stNames.add(typed_dep);stNames.add(select_arr);
+		List<String> stNames = new ArrayList<String>(); stNames.add(typedDep);stNames.add(selectArr);
 		
 		Assert.assertTrue(stNames.equals(output3.getRoute()));
 		

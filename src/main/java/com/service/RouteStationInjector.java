@@ -13,8 +13,11 @@ import com.entities.Dao;
 import com.entities.Station;
 @Service("routeStationsInjector")
 public class RouteStationInjector {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(RouteStationInjector.class);
 
 	@Transactional
@@ -28,10 +31,9 @@ public class RouteStationInjector {
 			RouteStationList route = dto.getRoute();
 			boolean isNewStationNew = true;
 			if (newStation.equals("")) {
-				for (Station s : dao.getAllStations()) {
-					if (s.getStation_name().equals(newStation)) {
-						isNewStationNew = false;
-					}
+				Station s = dao.getStationByName(newStation);
+				if (s != null) {
+					isNewStationNew = false;
 				}
 			}
 			Station stationForInsert = null;
@@ -45,8 +47,8 @@ public class RouteStationInjector {
 				}
 			}
 			List<String> newRoute = route.getRoute();
-			if (!newRoute.contains(stationForInsert.getStation_name())) {
-				newRoute.add(step + 1, stationForInsert.getStation_name());
+			if (!newRoute.contains(stationForInsert.getStationName())) {
+				newRoute.add(step + 1, stationForInsert.getStationName());
 			}
 			route.setRoute(newRoute);
 			LOG.debug("=====================================================================");

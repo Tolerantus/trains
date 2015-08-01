@@ -13,8 +13,11 @@ import com.entities.Dao;
 import com.entities.Journey;
 @Service("journeyBriefer")
 public class JourneyBriefer {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(JourneyBriefer.class);
 
 	@Transactional
@@ -26,8 +29,8 @@ public class JourneyBriefer {
 		List<String> journeyNames = new ArrayList<String>();
 		if (!journeys.isEmpty()) {
 			for (Journey j : journeys) {
-				journeyNames.add(j.getJourney_id() + " "
-						+ dao.getRoute(j.getRoute_id()).getRoute_name());
+				journeyNames.add(j.getJourneyId() + " "
+						+ (j.getRoute()).getRouteName());
 			}
 			dto.setJourneys(journeyNames);
 		}

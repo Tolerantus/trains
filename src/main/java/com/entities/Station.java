@@ -2,6 +2,7 @@ package com.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,16 +17,19 @@ import javax.persistence.Id;
  */
 @Entity
 public class Station implements Serializable {
-@Id
-@GeneratedValue (strategy=GenerationType.AUTO)
-private int station_id;
-private String station_name;	
+	@Id
+	@GeneratedValue (strategy=GenerationType.AUTO)
+	@Column(name = "station_id")
+	private int stationId;
+	@Column(name = "station_name")
+	private String stationName;	
+
 	private static final long serialVersionUID = 1L;
 
-	public Station(int station_id, String station_name) {
+	public Station(int stationId, String stationName) {
 		super();
-		this.station_id = station_id;
-		this.station_name = station_name;
+		this.stationId = stationId;
+		this.stationName = stationName;
 	}
 
 	public Station() {
@@ -36,7 +40,7 @@ private String station_name;
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + station_id;
+		result = prime * result + stationId;
 		return result;
 	}
 
@@ -49,30 +53,32 @@ private String station_name;
 		if (getClass() != obj.getClass())
 			return false;
 		Station other = (Station) obj;
-		if (station_id != other.station_id)
+		if (stationId != other.stationId)
 			return false;
 		return true;
 	}
 
-	public int getStation_id() {
-		return station_id;
+	
+
+	public int getStationId() {
+		return stationId;
 	}
 
-	public void setStation_id(int station_id) {
-		this.station_id = station_id;
+	public void setStationId(int stationId) {
+		this.stationId = stationId;
 	}
 
-	public String getStation_name() {
-		return station_name;
+	public String getStationName() {
+		return stationName;
 	}
 
-	public void setStation_name(String station_name) {
-		this.station_name = station_name;
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
 	}
 
 	@Override
 	public String toString() {
-		return station_name;
+		return stationName;
 	}
    
 }

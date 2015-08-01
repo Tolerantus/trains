@@ -17,8 +17,11 @@ import com.entities.Shedule;
 import com.entities.Station;
 @Service("finalRouteBuilder")
 public class FinalRouteBuilder {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	private static final Logger LOG = Logger.getLogger(FinalRouteBuilder.class);
 
 	@Transactional
@@ -29,10 +32,9 @@ public class FinalRouteBuilder {
 			List<String> newRoute = dto.getNewRoute();
 			List<String> newDirections = dto.getNewDirections();
 			boolean error = false;
-			for (Route r : dao.getAllRoutes()) {
-				if (r.getRoute_name().equals(dto.getRouteName())) {
-					error = true;
-				}
+			Route r = dao.getRouteByName(dto.getRouteName());
+			if (r != null) {
+				error = true;
 			}
 			if (!error) {
 				int sumMinutes = 0;
@@ -48,30 +50,28 @@ public class FinalRouteBuilder {
 							.getMinutes());
 					double cost = Double.parseDouble(dto.getData().get(i)
 							.getCost());
-					if (!isDirectionExist(s1.getStation_id(),s2.getStation_id())) {
-						 dao.createDirection(s1.getStation_id(),
-								s2.getStation_id(),
-								(hours * 60 + minutes) * 60 * 1000, cost);
+					if (!isDirectionExist(s1.getStationId(),s2.getStationId())) {
+						 dao.createDirection(s1, s2, (hours * 60 + minutes) * 60 * 1000, cost);
 						
 					}
 
 				}
-				Route r = dao.createRoute(dto.getRouteName());
+				r = dao.createRoute(dto.getRouteName());
 				for (int i = 0; i < newRoute.size() - 1; i++) {
 					Station s1 = dao.getStationByName(newRoute.get(i));
 					Station s2 = dao.getStationByName(newRoute.get(i + 1));
 					Direction d = dao.getDirectionByStartFinish(
-							s1.getStation_id(), s2.getStation_id());
+							s1.getStationId(), s2.getStationId());
 					sumMinutes += d.getTime() / (1000 * 60);
 					sumCost += d.getCost();
-					if (!isSheduleExist(d.getDirection_id(), r.getRoute_id(), i)) {
-						dao.createShedule(d.getDirection_id(), r.getRoute_id(),	i);
+					if (!isSheduleExist(d.getDirectionId(), r.getRouteId(), i)) {
+						dao.createShedule(d, r,	i);
 					}
 				}
 				sumHours = sumMinutes / 60;
 				sumMinutes = sumMinutes % 60;
 				List<String> routeInfo = new ArrayList<String>();
-				routeInfo.add(r.getRoute_name());
+				routeInfo.add(r.getRouteName());
 				routeInfo.add(String.valueOf(sumHours));
 				routeInfo.add(String.valueOf(sumMinutes));
 				routeInfo.add(String.valueOf(sumCost));
@@ -88,23 +88,20 @@ public class FinalRouteBuilder {
 			}
 	}
 	private  boolean isDirectionExist(int st_dep, int st_arr){
-		boolean isExist = false;
-		for (Direction d : dao.getAllDirections()){
-			Station s1 = dao.getStation(d.getSt_dep());
-			Station s2 = dao.getStation(d.getSt_arr());
-			if (s1.getStation_id()==st_dep&&s2.getStation_id()==st_arr){
-				isExist = true;
-			}
+		Direction d = dao.getDirectionByStartFinish(st_dep, st_arr);
+		if (d != null) {
+			return true;
+		} else {
+			return false;
 		}
-		return isExist;
+
 	}
-	private  boolean isSheduleExist(int dir_id, int route_id, int step){
-		boolean isExist = false;
-		for (Shedule s : dao.getAllShedules()){
-			if (s.getDirection_id()==dir_id&&s.getRoute_id()==route_id&&s.getStep()==step){
-				isExist=true;
-			}
+	private  boolean isSheduleExist(int dirId, int routeId, int step){
+		Shedule s = dao.getShedule(routeId, dirId, step);
+		if (s !=null) {
+			return true;
+		} else {
+			return false;
 		}
-		return isExist;
 	}
 }

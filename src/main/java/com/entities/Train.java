@@ -13,14 +13,17 @@ import javax.persistence.*;
 public class Train implements Serializable {
 @Id 
 @GeneratedValue(strategy=GenerationType.AUTO)
-private int train_id;
-private int train_seats;
+@Column(name = "train_id")
+private int trainId;
+
+@Column(name = "train_seats")
+private int trainSeats;
 	
 	@Override
 public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + train_id;
+	result = prime * result + trainId;
 	return result;
 }
 
@@ -33,7 +36,7 @@ public boolean equals(Object obj) {
 	if (getClass() != obj.getClass())
 		return false;
 	Train other = (Train) obj;
-	if (train_id != other.train_id)
+	if (trainId != other.trainId)
 		return false;
 	return true;
 }
@@ -44,26 +47,28 @@ public boolean equals(Object obj) {
 		super();
 	}
 
-	public Train(int train_id, int train_seats) {
+	public Train(int trainId, int trainSeats) {
 		super();
-		this.train_id = train_id;
-		this.train_seats = train_seats;
+		this.trainId = trainId;
+		this.trainSeats = trainSeats;
 	}
 
-	public int getTrain_id() {
-		return train_id;
+	public int getTrainId() {
+		return trainId;
 	}
 
-	public void setTrain_id(int train_id) {
-		this.train_id = train_id;
+	public void setTrainId(int trainId) {
+		this.trainId = trainId;
 	}
 
-	public int getTrain_seats() {
-		return train_seats;
+	public int getTrainSeats() {
+		return trainSeats;
 	}
 
-	public void setTrain_seats(int train_seats) {
-		this.train_seats = train_seats;
+	public void setTrainSeats(int trainSeats) {
+		this.trainSeats = trainSeats;
 	}
+
+
    
 }

@@ -2,7 +2,6 @@ package com.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,11 @@ import com.entities.Ticket;
 
 @Service
 public class TicketService {
-	@Autowired
 	private Dao dao;
+	@Autowired
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
 	
 	@Transactional
 	public List<Ticket> dispatch(TicketContainer container) {
@@ -40,8 +42,6 @@ public class TicketService {
 	public List<Ticket> getTicketsBetween(String startDate, String stopDate) {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		startDate = "01/01/2015";
-		stopDate = sdf.format(new Date());
 		List<Ticket> tickets = null;
 		try {
 			tickets = dao.getTicketsBetweenDates(sdf.parse(startDate), sdf.parse(stopDate));
@@ -53,7 +53,6 @@ public class TicketService {
 	
 	public List<Ticket> getTicketsBefore(@RequestParam("stopDate") String stopDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		stopDate = sdf.format(new Date());
 		List<Ticket> tickets = null;
 		try {
 			tickets = dao.getTicketsBefore(sdf.parse(stopDate));
@@ -65,7 +64,6 @@ public class TicketService {
 
 	public List<Ticket> getTicketsAfter(@RequestParam("startDate") String startDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		startDate = "01/01/2015";
 		List<Ticket> tickets = null;
 		try {
 			tickets = dao.getTicketsAfter(sdf.parse(startDate));

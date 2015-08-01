@@ -34,55 +34,59 @@ PassengerRegistrator registrator;
 Dao dao = Mockito.mock(Dao.class);
 @Before
 public void init(){
-	registrator = new PassengerRegistrator(dao);
+	registrator = new PassengerRegistrator();
+	registrator.setDao(dao);
+	
 }
 
 	@Test
 	public void testRegister() throws Exception {
-		Station s1 = new Station(); s1.setStation_id(1);s1.setStation_name("s1");Station s2 = new Station(); s2.setStation_id(2);s2.setStation_name("s2");
-		Journey j = new Journey(); j.setJourney_id(3);
+		Station s1 = new Station(); s1.setStationId(1);s1.setStationName("s1");
+		Station s2 = new Station(); s2.setStationId(2);s2.setStationName("s2");
+		Journey j = new Journey(); j.setJourneyId(3);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 		Date passengerDep = new Date();
 		Date passengerDest = new Date(new Date().getTime()+1000*60*60*24);
 		String cost = "1000";
-		String journeyData = j.getJourney_id()+";"+sdf2.format(passengerDep)+";"+sdf2.format(passengerDest)+";"+cost;
+		String journeyData = j.getJourneyId()+";"+sdf2.format(passengerDep)+";"+sdf2.format(passengerDest)+";"+cost;
 		List<String> allJourneysData = new ArrayList<String>();allJourneysData.add(journeyData);
 		PassengerInfo info = new PassengerInfo
-				("user",j.getJourney_id()+";0;0;"+s1.getStation_id()+";"+s2.getStation_id(),"name","surname","2000","11","11",allJourneysData);
+				("user",j.getJourneyId()+";0;0;"+s1.getStationId()+";"+s2.getStationId(),"name","surname","2000","11","11",allJourneysData);
 		
 		
 		
-		Passenger newPassenger = new Passenger();newPassenger.setPassenger_name(info.getName());newPassenger.setPassenger_surname(info.getSurname());
-		newPassenger.setPassenger_birthday(sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()));
-				
-		Ticket ticket = new Ticket();ticket.setJourney_id(j.getJourney_id());ticket.setPassenger_id(newPassenger.getPassenger_id());
-		ticket.setSt_arr(s2.getStation_id());ticket.setSt_dep(s1.getStation_id());ticket.setTicket_id(3);
+		Passenger newPassenger = new Passenger();newPassenger.setPassengerName(info.getName());newPassenger.setPassengerSurname(info.getSurname());
+		newPassenger.setPassengerBirthday(sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()));
 		
-		User user = new User();user.setUser_login("user");user.setUser_id(4);
+		Date purchaseDate = new Date();
+		Ticket ticket = new Ticket();ticket.setJourney(j);ticket.setPassenger(newPassenger);
+		ticket.setStArr(s2);ticket.setStDep(s1);ticket.setTicketId(3); ticket.setPurchaseDate(purchaseDate);
+		
+		User user = new User();user.setUserLogin("user");user.setUserId(4);
 		
 		
 		Mockito.when(dao.createPassenger(info.getName(), info.getSurname(), sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()))).
 		thenReturn(newPassenger);
-		Mockito.when(dao.getStation(s1.getStation_id())).thenReturn(s1);
-		Mockito.when(dao.getStation(s2.getStation_id())).thenReturn(s2);
-		Mockito.when(dao.getAllTickets()).thenReturn(new ArrayList<Ticket>());
-		Mockito.when(dao.createTicket(newPassenger.getPassenger_id(), j.getJourney_id(),
-				s1.getStation_id(), s2.getStation_id())).thenReturn(ticket);
+		Mockito.when(dao.getJourney(j.getJourneyId())).thenReturn(j);
+		Mockito.when(dao.getStation(s1.getStationId())).thenReturn(s1);
+		Mockito.when(dao.getStation(s2.getStationId())).thenReturn(s2);
+		Mockito.when(dao.getDate()).thenReturn(purchaseDate);
+		Mockito.when(dao.createTicket(newPassenger, j, s1, s2, purchaseDate)).thenReturn(ticket);
 		Mockito.when(dao.getUserByName(info.getCurrentUser())).thenReturn(user);
 		
 		StringBuilder ticketInfo = new StringBuilder(
-				String.valueOf(ticket.getTicket_id()));
+				String.valueOf(ticket.getTicketId()));
 		ticketInfo.append(";");
-		ticketInfo.append(newPassenger.getPassenger_name());
+		ticketInfo.append(newPassenger.getPassengerName());
 		ticketInfo.append(";");
-		ticketInfo.append(newPassenger.getPassenger_surname());
+		ticketInfo.append(newPassenger.getPassengerSurname());
 		ticketInfo.append(";");
-		ticketInfo.append(s1.getStation_name());
+		ticketInfo.append(s1.getStationName());
 		ticketInfo.append(";");
 		ticketInfo.append(sdf2.format(passengerDep));
 		ticketInfo.append(";");
-		ticketInfo.append(s2.getStation_name());
+		ticketInfo.append(s2.getStationName());
 		ticketInfo.append(";");
 		ticketInfo.append(sdf2.format(passengerDest));
 		ticketInfo.append(";");
@@ -102,8 +106,8 @@ public void init(){
 	}
 	@Test(expected=ArrayIndexOutOfBoundsException.class)
 	public void test4() throws Exception{
-		Station s1 = new Station(); s1.setStation_id(1);s1.setStation_name("s1");Station s2 = new Station(); s2.setStation_id(2);s2.setStation_name("s2");
-		Journey j = new Journey(); j.setJourney_id(3);
+		Station s1 = new Station(); s1.setStationId(1);s1.setStationName("s1");Station s2 = new Station(); s2.setStationId(2);s2.setStationName("s2");
+		Journey j = new Journey(); j.setJourneyId(3);
 		
 		Date passengerDep = new Date();
 		Date passengerDest = new Date(new Date().getTime()+1000*60*60*24);
@@ -111,41 +115,40 @@ public void init(){
 		List<String> allJourneysData = new ArrayList<String>();
 		
 		PassengerInfo info = new PassengerInfo
-				("user",j.getJourney_id()+";0;0;"+s1.getStation_id()+";"+s2.getStation_id(),"name","surname","2000","11","11",allJourneysData);
+				("user",j.getJourneyId()+";0;0;"+s1.getStationId()+";"+s2.getStationId(),"name","surname","2000","11","11",allJourneysData);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 		
-		Passenger newPassenger = new Passenger();newPassenger.setPassenger_name(info.getName());newPassenger.setPassenger_surname(info.getSurname());
-		newPassenger.setPassenger_birthday(sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()));
+		Passenger newPassenger = new Passenger();newPassenger.setPassengerName(info.getName());newPassenger.setPassengerSurname(info.getSurname());
+		newPassenger.setPassengerBirthday(sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()));
 				
-		Ticket ticket = new Ticket();ticket.setJourney_id(j.getJourney_id());ticket.setPassenger_id(newPassenger.getPassenger_id());
-		ticket.setSt_arr(s2.getStation_id());ticket.setSt_dep(s1.getStation_id());ticket.setTicket_id(3);
+		Date purchaseDate = new Date();
+		Ticket ticket = new Ticket(); ticket.setJourney(j); ticket.setPassenger(newPassenger);
+		ticket.setStArr(s2); ticket.setStDep(s1); ticket.setTicketId(3); ticket.setPurchaseDate(purchaseDate);
 		
-		User user = new User();user.setUser_login("user");user.setUser_id(4);
+		User user = new User(); user.setUserLogin("user"); user.setUserId(4);
 		
 		
 		Mockito.when(dao.createPassenger(info.getName(), info.getSurname(), sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()))).
 		thenReturn(newPassenger);
-		Mockito.when(dao.getStation(s1.getStation_id())).thenReturn(s1);
-		Mockito.when(dao.getStation(s2.getStation_id())).thenReturn(s2);
-		Mockito.when(dao.getAllTickets()).thenReturn(new ArrayList<Ticket>());
-		Mockito.when(dao.createTicket(newPassenger.getPassenger_id(), j.getJourney_id(),
-				s1.getStation_id(), s2.getStation_id())).thenReturn(ticket);
+		Mockito.when(dao.getStation(s1.getStationId())).thenReturn(s1);
+		Mockito.when(dao.getStation(s2.getStationId())).thenReturn(s2);
+		Mockito.when(dao.createTicket(newPassenger, j, s1, s2, purchaseDate)).thenReturn(ticket);
 		Mockito.when(dao.getUserByName(info.getCurrentUser())).thenReturn(user);
 		
 		StringBuilder ticketInfo = new StringBuilder(
-				String.valueOf(ticket.getTicket_id()));
+				String.valueOf(ticket.getTicketId()));
 		ticketInfo.append(";");
-		ticketInfo.append(newPassenger.getPassenger_name());
+		ticketInfo.append(newPassenger.getPassengerName());
 		ticketInfo.append(";");
-		ticketInfo.append(newPassenger.getPassenger_surname());
+		ticketInfo.append(newPassenger.getPassengerSurname());
 		ticketInfo.append(";");
-		ticketInfo.append(s1.getStation_name());
+		ticketInfo.append(s1.getStationName());
 		ticketInfo.append(";");
 		ticketInfo.append(sdf2.format(passengerDep));
 		ticketInfo.append(";");
-		ticketInfo.append(s2.getStation_name());
+		ticketInfo.append(s2.getStationName());
 		ticketInfo.append(";");
 		ticketInfo.append(sdf2.format(passengerDest));
 		ticketInfo.append(";");
@@ -157,50 +160,50 @@ public void init(){
 	
 	@Test(expected=ParseException.class)
 	public void test5() throws Exception {
-		Station s1 = new Station(); s1.setStation_id(1);s1.setStation_name("s1");Station s2 = new Station(); s2.setStation_id(2);s2.setStation_name("s2");
-		Journey j = new Journey(); j.setJourney_id(3);
+		Station s1 = new Station(); s1.setStationId(1);s1.setStationName("s1");Station s2 = new Station(); s2.setStationId(2);s2.setStationName("s2");
+		Journey j = new Journey(); j.setJourneyId(3);
 		
 		Date passengerDep = new Date();
 		Date passengerDest = new Date(new Date().getTime()+1000*60*60*24);
 		String cost = "1000";
-		String journeyData = j.getJourney_id()+";"+passengerDep+";"+passengerDest+";"+cost;
+		String journeyData = j.getJourneyId()+";"+passengerDep+";"+passengerDest+";"+cost;
 		List<String> allJourneysData = new ArrayList<String>();allJourneysData.add(journeyData);
 		PassengerInfo info = new PassengerInfo
-				("user",j.getJourney_id()+";0;0;"+s1.getStation_id()+";"+s2.getStation_id(),"name","surname"," "," "," ",allJourneysData);
+				("user",j.getJourneyId()+";0;0;"+s1.getStationId()+";"+s2.getStationId(),"name","surname"," "," "," ",allJourneysData);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 		
-		Passenger newPassenger = new Passenger();newPassenger.setPassenger_name(info.getName());newPassenger.setPassenger_surname(info.getSurname());
-		newPassenger.setPassenger_birthday(sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()));
+		Passenger newPassenger = new Passenger();newPassenger.setPassengerName(info.getName());newPassenger.setPassengerSurname(info.getSurname());
+		newPassenger.setPassengerBirthday(sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()));
 				
-		Ticket ticket = new Ticket();ticket.setJourney_id(j.getJourney_id());ticket.setPassenger_id(newPassenger.getPassenger_id());
-		ticket.setSt_arr(s2.getStation_id());ticket.setSt_dep(s1.getStation_id());ticket.setTicket_id(3);
+		Date purchaseDate = new Date();
+		Ticket ticket = new Ticket();ticket.setJourney(j);ticket.setPassenger(newPassenger);
+		ticket.setStArr(s2);ticket.setStDep(s1);ticket.setTicketId(3); ticket.setPurchaseDate(purchaseDate);
 		
-		User user = new User();user.setUser_login("user");user.setUser_id(4);
+		User user = new User();user.setUserLogin("user");user.setUserId(4);
 		
 		
 		Mockito.when(dao.createPassenger(info.getName(), info.getSurname(), sdf.parse(info.getYear()+"-"+info.getMonth()+"-"+info.getDay()))).
 		thenReturn(newPassenger);
-		Mockito.when(dao.getStation(s1.getStation_id())).thenReturn(s1);
-		Mockito.when(dao.getStation(s2.getStation_id())).thenReturn(s2);
-		Mockito.when(dao.getAllTickets()).thenReturn(new ArrayList<Ticket>());
-		Mockito.when(dao.createTicket(newPassenger.getPassenger_id(), j.getJourney_id(),
-				s1.getStation_id(), s2.getStation_id())).thenReturn(ticket);
+		Mockito.when(dao.getStation(s1.getStationId())).thenReturn(s1);
+		Mockito.when(dao.getStation(s2.getStationId())).thenReturn(s2);
+		Mockito.when(dao.createTicket(newPassenger, j,
+				s1, s2, purchaseDate)).thenReturn(ticket);
 		Mockito.when(dao.getUserByName(info.getCurrentUser())).thenReturn(user);
 		
 		StringBuilder ticketInfo = new StringBuilder(
-				String.valueOf(ticket.getTicket_id()));
+				String.valueOf(ticket.getTicketId()));
 		ticketInfo.append(";");
-		ticketInfo.append(newPassenger.getPassenger_name());
+		ticketInfo.append(newPassenger.getPassengerName());
 		ticketInfo.append(";");
-		ticketInfo.append(newPassenger.getPassenger_surname());
+		ticketInfo.append(newPassenger.getPassengerSurname());
 		ticketInfo.append(";");
-		ticketInfo.append(s1.getStation_name());
+		ticketInfo.append(s1.getStationName());
 		ticketInfo.append(";");
 		ticketInfo.append(sdf2.format(passengerDep));
 		ticketInfo.append(";");
-		ticketInfo.append(s2.getStation_name());
+		ticketInfo.append(s2.getStationName());
 		ticketInfo.append(";");
 		ticketInfo.append(sdf2.format(passengerDest));
 		ticketInfo.append(";");

@@ -5,6 +5,9 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 
 /**
  * Entity implementation class for Entity: Ticket
@@ -15,19 +18,38 @@ import javax.persistence.*;
 public class Ticket implements Serializable {
 @Id
 @GeneratedValue (strategy=GenerationType.AUTO)
-private int ticket_id;
-private int passenger_id;
-private int journey_id;
-private int st_dep;
-private int st_arr;
+@Column(name = "ticket_id")
+private int ticketId;
+
+@ManyToOne
+@JoinColumn(name = "passenger_id", referencedColumnName = "passenger_id")
+@Cascade({CascadeType.SAVE_UPDATE})
+private Passenger passenger;
+
+@ManyToOne
+@JoinColumn(name = "journey_id", referencedColumnName = "journey_id")
+@Cascade({CascadeType.SAVE_UPDATE})
+private Journey journey;
+
+@ManyToOne
+@JoinColumn(name = "st_dep", referencedColumnName = "station_id")
+@Cascade({CascadeType.SAVE_UPDATE})
+private Station stDep;
+
+@ManyToOne
+@JoinColumn(name = "st_arr", referencedColumnName = "station_id")
+@Cascade({CascadeType.SAVE_UPDATE})
+private Station stArr;
+
 @Temporal(TemporalType.TIMESTAMP)
+@Column(name = "purchase_date")
 private Date purchaseDate;	
 
 @Override
 public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ticket_id;
+	result = prime * result + ticketId;
 	return result;
 }
 
@@ -40,25 +62,50 @@ public boolean equals(Object obj) {
 	if (getClass() != obj.getClass())
 		return false;
 	Ticket other = (Ticket) obj;
-	if (ticket_id != other.ticket_id)
+	if (ticketId != other.ticketId)
 		return false;
 	return true;
 }
 
-
-
-public Ticket(int ticket_id, int passenger_id, int journey_id, int st_dep,
-		int st_arr, Date purchaseDate) {
-	super();
-	this.ticket_id = ticket_id;
-	this.passenger_id = passenger_id;
-	this.journey_id = journey_id;
-	this.st_dep = st_dep;
-	this.st_arr = st_arr;
-	this.purchaseDate = purchaseDate;
+public int getTicketId() {
+	return ticketId;
 }
 
+public void setTicketId(int ticketId) {
+	this.ticketId = ticketId;
+}
 
+public Passenger getPassenger() {
+	return passenger;
+}
+
+public void setPassenger(Passenger passenger) {
+	this.passenger = passenger;
+}
+
+public Journey getJourney() {
+	return journey;
+}
+
+public void setJourney(Journey journey) {
+	this.journey = journey;
+}
+
+public Station getStDep() {
+	return stDep;
+}
+
+public void setStDep(Station stDep) {
+	this.stDep = stDep;
+}
+
+public Station getStArr() {
+	return stArr;
+}
+
+public void setStArr(Station stArr) {
+	this.stArr = stArr;
+}
 
 public Date getPurchaseDate() {
 	return purchaseDate;
@@ -68,44 +115,15 @@ public void setPurchaseDate(Date purchaseDate) {
 	this.purchaseDate = purchaseDate;
 }
 
-public int getTicket_id() {
-	return ticket_id;
-}
-
-public void setTicket_id(int ticket_id) {
-	this.ticket_id = ticket_id;
-}
-
-public int getPassenger_id() {
-	return passenger_id;
-}
-
-public void setPassenger_id(int passenger_id) {
-	this.passenger_id = passenger_id;
-}
-
-public int getJourney_id() {
-	return journey_id;
-}
-
-public void setJourney_id(int journey_id) {
-	this.journey_id = journey_id;
-}
-
-public int getSt_dep() {
-	return st_dep;
-}
-
-public void setSt_dep(int st_dep) {
-	this.st_dep = st_dep;
-}
-
-public int getSt_arr() {
-	return st_arr;
-}
-
-public void setSt_arr(int st_arr) {
-	this.st_arr = st_arr;
+	public Ticket(int ticketId, Passenger passenger, Journey journey,
+		Station stDep, Station stArr, Date purchaseDate) {
+	super();
+	this.ticketId = ticketId;
+	this.passenger = passenger;
+	this.journey = journey;
+	this.stDep = stDep;
+	this.stArr = stArr;
+	this.purchaseDate = purchaseDate;
 }
 
 	private static final long serialVersionUID = 1L;
