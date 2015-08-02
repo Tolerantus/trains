@@ -52,6 +52,7 @@ public class TicketService {
 	
 	public List<Ticket> getTicketsBefore(String stopDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+	
 		List<Ticket> tickets = null;
 		try {
 			tickets = dao.getTicketsBefore(sdf.parse(stopDate));

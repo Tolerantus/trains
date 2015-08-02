@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 
 /**
@@ -32,6 +30,7 @@ private Journey journey;
 @ManyToOne
 @JoinColumn(name = "st_dep", referencedColumnName = "station_id")
 private Station stDep;
+
 
 @ManyToOne
 @JoinColumn(name = "st_arr", referencedColumnName = "station_id")
